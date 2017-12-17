@@ -59,20 +59,14 @@ namespace FiniteStateMachine
             if (id != FSM_ID.NONE)
             {
                 if (dicFSM_EachLayer[layerNum].ContainsKey(id))
-                {
-#if WARNING_FSM
-                UDL.LogWarning("동일 레이어에 중복된 FSM ID 를 등록하려함!", FSM.logOption, FSM.warningLoglv); 
-#endif
-                }
+                  UDL.LogWarning("동일 레이어에 중복된 FSM ID 를 등록하려함!", FSM.logOption, FSM.warningLoglv); 
                 else
                     newFSM.SetFSMID(id);
             }
 
             dicFSM_EachLayer[layerNum].Add(newFSM.fsmID, newFSM);
 
-#if DEBUG_FSM
-        UDL.Log(eLayer + " // add : " + newFSM.fsmID, FSM.logOption, 7);
-#endif
+            UDL.Log(eLayer + " // add : " + newFSM.fsmID, FSM.logOption, FSM.logLv);
 
             if (curFSM_EachLayer[layerNum] == null)
             {
@@ -93,10 +87,8 @@ namespace FiniteStateMachine
             {
                 dicFSM_EachLayer[layerNum].Remove(id);
             }
-#if WARNING_FSM
         else
             UDL.LogWarning("가지고 있지 않은 FSM을 삭제하려 함", FSM.logOption, FSM.warningLoglv); 
-#endif
 
             if (curFSM_EachLayer[layerNum].fsmID == id)
                 curFSM_EachLayer[layerNum] = null;
@@ -173,9 +165,7 @@ namespace FiniteStateMachine
         {
             if (curFSM_EachLayer[(int)eLayer] == null)
             {
-#if WARNING_FSM
-            UDL.LogWarning(eLayer + " 지정한 레이어에 FSM이 지정되 있지 않음", FSM.logOption, FSM.warningLoglv); 
-#endif
+                UDL.LogWarning(eLayer + " 지정한 레이어에 FSM이 지정되 있지 않음", FSM.logOption, FSM.warningLoglv);
                 return false;
             }
             else
@@ -261,19 +251,17 @@ namespace FiniteStateMachine
         {
             layerNum = (int)eLayer;
 
-#if WARNING_FSM
-        if (!CurLayerCheck(eLayer))
-        {
-            UDL.LogWarning("Fail ChangeFSM. Layer : " + eLayer, FSM.logOption, FSM.warningLoglv);
-            return;
-        }
+            if (!CurLayerCheck(eLayer))
+            {
+                UDL.LogWarning("Fail ChangeFSM. Layer : " + eLayer, FSM.logOption, FSM.warningLoglv);
+                return;
+            }
 
-        if (!dicFSM_EachLayer[layerNum].TryGetValue(fsmID, out tFSMBuffer))
-        {
-            UDL.LogWarning(eLayer + " 에 " + fsmID + " 가 등록되어 있지 않습니다", FSM.logOption, FSM.warningLoglv);
-            return;
-        } 
-#endif
+            if (!dicFSM_EachLayer[layerNum].TryGetValue(fsmID, out tFSMBuffer))
+            {
+                UDL.LogWarning(eLayer + " 에 " + fsmID + " 가 등록되어 있지 않습니다", FSM.logOption, FSM.warningLoglv);
+                return;
+            }
 
             if (CurLayerCheck(eLayer))
             {
@@ -289,9 +277,8 @@ namespace FiniteStateMachine
 
                 curFSM_EachLayer[layerNum].Resume();
             }
-#if DEBUG_FSM
-        UDL.Log("(ChangeFSM) curFSM : " + curFSM_EachLayer[layerNum].fsmID.ToString(), FSM.logOption, 7); 
-#endif
+
+            UDL.Log("(ChangeFSM) curFSM : " + curFSM_EachLayer[layerNum].fsmID.ToString(), FSM.logOption, FSM.logLv); 
         }
 
         public void ChangeFSM_Manual(FSM_LAYER_ID eLayer, FSM_ID fsmID)
@@ -314,14 +301,12 @@ namespace FiniteStateMachine
             ChangeFSM(eLayer, layerFSM_Buffer[layerNum]);
         }
 
-#if WARNING_FSM
      string[] errMsgAbout_Register_ChangeLayerState =
 {
         "Success",
         "해당 레이어에 FSM이 등록되어 있지 않습니다. ",
         "해당 레이어의 이벤트 버퍼 리스트가 존재하지 않습니다"
     }; 
-#endif
 
         private int RegisterToFSM_ChangeLayerState(FSM_LAYER_ID eLayer)
         {
@@ -369,14 +354,11 @@ namespace FiniteStateMachine
             dicLayerChangeState[eLayer].Add(_deleFunc);
 
 
-#if WARNING_FSM
         int result = RegisterToFSM_ChangeLayerState(eLayer);
 
         if (result == 1)
-            UDL.LogWarning(eLayer + " " + errMsgAbout_Register_ChangeLayerState[result] + " // 이 후 해당 레이어에 ChangeFSM이 호출 될 때 반영될 수 있습니다. ", FSM.logOption, FSM.warningLoglv); 
-#else
-            RegisterToFSM_ChangeLayerState(eLayer);
-#endif
+            UDL.LogWarning(eLayer + " " + errMsgAbout_Register_ChangeLayerState[result] + " // 이 후 해당 레이어에 ChangeFSM이 호출 될 때 반영될 수 있습니다. ", FSM.logOption, FSM.warningLoglv);
+
         }
 
         public void UnRegisterChangeLayerState(FSM_LAYER_ID eLayer, deleStateTransEvent _deleFunc)

@@ -1,7 +1,4 @@
-﻿#define DEBUG_FSM
-#define WARNING_FSM
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -117,10 +114,8 @@ namespace FiniteStateMachine
 
         public void AddState(State newState)
         {
-#if WARNING_FSM
             if (newState.eID == STATE_ID.AnyState)
                 UDL.LogWarning("AnyState(Code_AnyState) 는 이미 생성되어 있습니다. ", logOption, FSM.warningLoglv);
-#endif
 
             if (dicStateList.ContainsKey(newState.eID))
             {
@@ -133,9 +128,7 @@ namespace FiniteStateMachine
 
         public State GetState(STATE_ID stateID)
         {
-#if DEBUG_FSM
             UDL.Log("GetState : " + stateID.ToString() + " / dicStateList.Count : " + dicStateList.Count.ToString(), logOption, FSM.logLv);
-#endif
 
             if (dicStateList.TryGetValue(stateID, out tStateBuffer))
                 return tStateBuffer;
@@ -298,12 +291,11 @@ namespace FiniteStateMachine
 
         bool CurStateTransitionChk()
         {
-#if DEBUG_FSM
             UDL.Log(fsmID + " CurStateTransitionChk", logOption, FSM.logLv);
 
             if (curState.arrTransitionList == null || curState.arrTransitionList.Length == 0)
                 UDL.LogWarning(fsmID + " No Transition List in curState", logOption, FSM.warningLoglv);
-#endif
+
             if (curState.arrTransitionList != null)
             {
                 for (int idx = 0; idx < curState.arrTransitionList.Length; idx++)
@@ -323,12 +315,11 @@ namespace FiniteStateMachine
 
         void AnyStateTransitionChk()
         {
-#if DEBUG_FSM
             UDL.Log(fsmID + " AnyStateTransitionChk", logOption, FSM.logLv);
 
             if (anyState.arrTransitionList == null || anyState.arrTransitionList.Length == 0)
                 UDL.LogError(fsmID + " No Transition List in AnyState", logOption, FSM.errorLoglv);
-#endif
+
             for (int idx = 0; idx < anyState.arrTransitionList.Length; idx++)
             {
                 if (anyState.arrTransitionList[idx].ConditionCheck(this))
@@ -361,18 +352,14 @@ namespace FiniteStateMachine
                 return;
             }
 
-#if WARNING_FSM
             calldepth++;
 
             if (calldepth > 1)
                 UDL.LogWarning(fsmID + " FSM Call Depth is : " + calldepth
                     + " // 재귀호출구조가 되면서 EvnetStateChange callback이 현재 상태만을 매개변수로 역순으로 반복호출됩니다. ", logOption, FSM.warningLoglv);
-#endif
 
-#if DEBUG_FSM
             UDL.Log(fsmID + " Transition Start// " + curState.eID + " -> "
                 + dicStateList[nextStateID].eID + " // " + transParamID, logOption, FSM.logLv);
-#endif
 
             STATE_ID preStateID = curState.eID;
 
@@ -410,9 +397,7 @@ namespace FiniteStateMachine
             STATE_ID preStateID = curState.eID;
             STATE_ID nextStateID = history.Pop();
 
-#if DEBUG_FSM
             UDL.Log(fsmID + " Transition Start// " + curState.eID + " -> " + nextStateID, logOption, FSM.logLv);
-#endif
 
             curState.End(TRANS_ID.HISTORY_BACK, nextStateID);
 
@@ -501,13 +486,11 @@ namespace FiniteStateMachine
             }
             else
             {
-#if WARNING_FSM
                 for (int idx = 0; idx < arrTransitionList.Length; idx++)
                 {
                     if (value.eTransID != 0 && arrTransitionList[idx].eTransID == value.eTransID)
                         UDL.LogWarning("동일한 전이 ID를 추가합니다", FSM.logOption, FSM.warningLoglv);
                 }
-#endif
 
                 tempArr = new TransitionCondition[arrTransitionList.Length + 1];
 
@@ -611,9 +594,8 @@ namespace FiniteStateMachine
         public void SetTransID(TRANS_ID id)
         {
             eTransID = id;
-#if WARNING_FSM
+
             UDL.LogWarning("Set trans ID : " + eTransID, FSM.logOption, FSM.warningLoglv);
-#endif
         }
 
         public void SetOwnerForTimeCond(State _ownerState)
@@ -628,11 +610,10 @@ namespace FiniteStateMachine
             {
                 if (arrTransParam.Count == 0)
                 {
-#if WARNING_FSM
                     UDL.LogWarning("전이 조건이 없습니다. // FSM ID : " + pFSM.fsmID.ToString() + " / " + "CurrentState : "
                         + pFSM.GetCurState().eID + " / OwnerState : "
                         + "/ TransID : " + eTransID.ToString(), FSM.logOption, FSM.warningLoglv);
-#endif
+
                     return false;
                 }
             }
@@ -784,10 +765,8 @@ namespace FiniteStateMachine
             }
             set
             {
-#if WARNING_FSM
                 if (m_eTransType != TransitionType.INT)
                     UDL.LogWarning(warningmsg, FSM.logOption, FSM.warningLoglv);
-#endif
 
                 m_iConditionValue = value;
             }
@@ -799,10 +778,8 @@ namespace FiniteStateMachine
             get { return m_fConditionValue; }
             set
             {
-#if WARNING_FSM
                 if (m_eTransType != TransitionType.FLOAT)
                     UDL.LogWarning(warningmsg, FSM.logOption, FSM.warningLoglv);
-#endif
 
                 m_fConditionValue = value;
             }
@@ -814,10 +791,8 @@ namespace FiniteStateMachine
             get { return m_bConditionValue; }
             set
             {
-#if WARNING_FSM
                 if (m_eTransType != TransitionType.BOOL)
                     UDL.LogWarning(warningmsg, FSM.logOption, FSM.warningLoglv);
-#endif
 
                 m_bConditionValue = value;
             }
@@ -829,10 +804,8 @@ namespace FiniteStateMachine
             get { return m_TriggerID; }
             set
             {
-#if WARNING_FSM
                 if (m_eTransType != TransitionType.TRIGGER)
                     UDL.LogWarning(warningmsg, FSM.logOption, FSM.warningLoglv);
-#endif
 
                 m_TriggerID = value;
             }
@@ -927,10 +900,9 @@ namespace FiniteStateMachine
 
         bool IntTypeCondtionChk(int value, FSM pFSM)
         {
-#if DEBUG_FSM
             if (!pFSM.dicIntParam.TryGetValue(m_uiParamID, out nParamBuffer))
                 UDL.LogError(m_uiParamID.ToString() + ". 등록되지 않은 Trans_Param_ID 입니다. ", FSM.logOption, FSM.errorLoglv);
-#endif
+
             switch (m_eCompOperator)
             {
                 case TransitionComparisonOperator.EQUALS:
@@ -964,23 +936,21 @@ namespace FiniteStateMachine
 
         bool FloatTypeCondtionChk(float value, FSM pFSM)
         {
-#if DEBUG_FSM
             if (!pFSM.dicFloatParam.TryGetValue(m_uiParamID, out fParamBuffer))
                 UDL.LogError(m_uiParamID.ToString() + ". 등록되지 않은 Trans_Param_ID 입니다. ", FSM.logOption, FSM.errorLoglv);
-#endif
+
             switch (m_eCompOperator)
             {
                 case TransitionComparisonOperator.EQUALS:
-#if WARNING_FSM
+
                     UDL.LogWarning("float 변수는 Equal 조건을 만족시키지 못 할 위험이 있습니다. ", FSM.logOption, FSM.warningLoglv);
-#endif
+
                     if (pFSM.dicFloatParam[m_uiParamID] == value)
                         return true;
                     break;
                 case TransitionComparisonOperator.NOTEQUAL:
-#if WARNING_FSM
                     UDL.LogWarning("float 변수는 NotEqual 조건을 사용하면 정확하지 않을 위험이 있습니다. ", FSM.logOption, FSM.warningLoglv);
-#endif
+
                     if (pFSM.dicFloatParam[m_uiParamID] != value)
                         return true;
                     break;
@@ -1007,19 +977,16 @@ namespace FiniteStateMachine
 
         bool BoolTypeConditionChk(bool value, FSM pFSM)
         {
-#if DEBUG_FSM
             if (!pFSM.dicBoolParam.TryGetValue(m_uiParamID, out bParamBuffer))
                 UDL.LogError(m_uiParamID.ToString() + ". 등록되지 않은 Trans_Param_ID 입니다. ", FSM.logOption, FSM.errorLoglv);
-#endif
+
             switch (m_eCompOperator)
             {
                 case TransitionComparisonOperator.LESS:
                 case TransitionComparisonOperator.GREATER:
                 case TransitionComparisonOperator.OVER:
                 case TransitionComparisonOperator.UNDER:
-#if WARNING_FSM
                     UDL.LogWarning("bool 변수에 잘못된 조건연산자를 지정했음", FSM.logOption, FSM.warningLoglv);
-#endif
                     return false;
                 case TransitionComparisonOperator.EQUALS:
                     if (pFSM.dicBoolParam[m_uiParamID] == value)
