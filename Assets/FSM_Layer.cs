@@ -23,7 +23,6 @@ namespace FiniteStateMachine
         int nParamBuffer;
         float fParamBuffer;
         bool bParamBuffer;
-        State tStateBuffer;
         FSM tFSMBuffer;
 
         public void ReleaseAll()
@@ -36,12 +35,12 @@ namespace FiniteStateMachine
                     dicFSM_EachLayer[i].Clear();
             }
 
-            dicFSM_EachLayer = new Dictionary<FSM_ID, FSM>[iMaxLayer];
+            dicFSM_EachLayer = null;
 
             EventLayerPause = null;
             EventLayerResume = null;
 
-            dicLayerChangeState = new Dictionary<FSM_LAYER_ID, List<deleStateTransEvent>>();
+            dicLayerChangeState = null;
         }
 
         public void AddFSM(FSM_LAYER_ID eLayer, FSM newFSM, FSM_ID id = FSM_ID.NONE)
@@ -199,7 +198,7 @@ namespace FiniteStateMachine
                 return null;
             }
 
-            return dicFSM_EachLayer[layerNum][fsmID];
+            return tFSMBuffer;
         }
 
         public State GetState(FSM_LAYER_ID eLayer, FSM_ID fsmID, STATE_ID stateID)
@@ -220,7 +219,7 @@ namespace FiniteStateMachine
                 return null;
             }
 
-            return dicFSM_EachLayer[layerNum][fsmID].GetState(stateID);
+            return tFSMBuffer.GetState(stateID);
         }
 
         public State GetCurState(FSM_LAYER_ID eLayer)
@@ -301,12 +300,12 @@ namespace FiniteStateMachine
             ChangeFSM(eLayer, layerFSM_Buffer[layerNum]);
         }
 
-     string[] errMsgAbout_Register_ChangeLayerState =
-{
-        "Success",
-        "해당 레이어에 FSM이 등록되어 있지 않습니다. ",
-        "해당 레이어의 이벤트 버퍼 리스트가 존재하지 않습니다"
-    }; 
+        string[] errMsgAbout_Register_ChangeLayerState =
+        {
+            "Success",
+            "해당 레이어에 FSM이 등록되어 있지 않습니다. ",
+            "해당 레이어의 이벤트 버퍼 리스트가 존재하지 않습니다"
+        };
 
         private int RegisterToFSM_ChangeLayerState(FSM_LAYER_ID eLayer)
         {
@@ -352,12 +351,11 @@ namespace FiniteStateMachine
                 dicLayerChangeState.Add(eLayer, new List<deleStateTransEvent>());
 
             dicLayerChangeState[eLayer].Add(_deleFunc);
+            
+            int result = RegisterToFSM_ChangeLayerState(eLayer);
 
-
-        int result = RegisterToFSM_ChangeLayerState(eLayer);
-
-        if (result == 1)
-            UDL.LogWarning(eLayer + " " + errMsgAbout_Register_ChangeLayerState[result] + " // 이 후 해당 레이어에 ChangeFSM이 호출 될 때 반영될 수 있습니다. ", FSM.logOption, FSM.warningLoglv);
+            if (result == 1)
+                UDL.LogWarning(eLayer + " " + errMsgAbout_Register_ChangeLayerState[result] + " // 이 후 해당 레이어에 ChangeFSM이 호출 될 때 반영될 수 있습니다. ", FSM.logOption, FSM.warningLoglv);
 
         }
 

@@ -188,7 +188,7 @@ namespace FiniteStateMachine
                 return 0;
             }
 
-            return dicFloatParam[param_id];
+            return fParamBuffer;
         }
         public bool GetParamBool(TRANS_PARAM_ID param_id)
         {
@@ -198,7 +198,7 @@ namespace FiniteStateMachine
                 return false;
             }
 
-            return dicBoolParam[param_id];
+            return bParamBuffer;
         }
 
 
@@ -244,34 +244,25 @@ namespace FiniteStateMachine
         public void SetInt_NoCondChk(TRANS_PARAM_ID param_id, int value)
         {
             if (!dicIntParam.TryGetValue(param_id, out nParamBuffer))
-            {
                 UDL.LogWarning(((FSM_ID)fsmID).ToString() + " not have given Transition parameter id. ", logOption, FSM.warningLoglv);
-                return;
-            }
-
-            dicIntParam[param_id] = value;
+            else
+                dicIntParam[param_id] = value;
         }
 
         public void SetFloat_NoCondChk(TRANS_PARAM_ID param_id, float value)
         {
             if (!dicFloatParam.TryGetValue(param_id, out fParamBuffer))
-            {
                 UDL.LogWarning(((FSM_ID)fsmID).ToString() + " not have given Transition parameter id. ", logOption, FSM.warningLoglv);
-                return;
-            }
-
-            dicFloatParam[param_id] = value;
+            else
+                dicFloatParam[param_id] = value;
         }
 
         public void SetBool_NoCondChk(TRANS_PARAM_ID param_id, bool value)
         {
             if (!dicBoolParam.TryGetValue(param_id, out bParamBuffer))
-            {
                 UDL.LogWarning(((FSM_ID)fsmID).ToString() + " not have given Transition parameter id. ", logOption, FSM.warningLoglv);
-                return;
-            }
-
-            dicBoolParam[param_id] = value;
+            else
+                dicBoolParam[param_id] = value;
         }
 
         public void SetTrigger(TRANS_PARAM_ID param_id)
@@ -752,7 +743,7 @@ namespace FiniteStateMachine
 
         int m_iConditionValue = 0;
 
-         int nParamBuffer;
+         int nParamBuffer = 0;
          float fParamBuffer;
          bool bParamBuffer;
          State tStateBuffer;
@@ -906,27 +897,27 @@ namespace FiniteStateMachine
             switch (m_eCompOperator)
             {
                 case TransitionComparisonOperator.EQUALS:
-                    if (pFSM.dicIntParam[m_uiParamID] == value)
+                    if (nParamBuffer == value)
                         return true;
                     break;
                 case TransitionComparisonOperator.NOTEQUAL:
-                    if (pFSM.dicIntParam[m_uiParamID] != value)
+                    if (nParamBuffer != value)
                         return true;
                     break;
                 case TransitionComparisonOperator.GREATER:
-                    if (pFSM.dicIntParam[m_uiParamID] >= value)
+                    if (nParamBuffer >= value)
                         return true;
                     break;
                 case TransitionComparisonOperator.LESS:
-                    if (pFSM.dicIntParam[m_uiParamID] <= value)
+                    if (nParamBuffer <= value)
                         return true;
                     break;
                 case TransitionComparisonOperator.OVER:
-                    if (pFSM.dicIntParam[m_uiParamID] > value)
+                    if (nParamBuffer > value)
                         return true;
                     break;
                 case TransitionComparisonOperator.UNDER:
-                    if (pFSM.dicIntParam[m_uiParamID] < value)
+                    if (nParamBuffer < value)
                         return true;
                     break;
             }
@@ -945,29 +936,29 @@ namespace FiniteStateMachine
 
                     UDL.LogWarning("float 변수는 Equal 조건을 만족시키지 못 할 위험이 있습니다. ", FSM.logOption, FSM.warningLoglv);
 
-                    if (pFSM.dicFloatParam[m_uiParamID] == value)
+                    if (fParamBuffer == value)
                         return true;
                     break;
                 case TransitionComparisonOperator.NOTEQUAL:
                     UDL.LogWarning("float 변수는 NotEqual 조건을 사용하면 정확하지 않을 위험이 있습니다. ", FSM.logOption, FSM.warningLoglv);
 
-                    if (pFSM.dicFloatParam[m_uiParamID] != value)
+                    if (fParamBuffer != value)
                         return true;
                     break;
                 case TransitionComparisonOperator.GREATER:
-                    if (pFSM.dicFloatParam[m_uiParamID] >= value)
+                    if (fParamBuffer >= value)
                         return true;
                     break;
                 case TransitionComparisonOperator.LESS:
-                    if (pFSM.dicFloatParam[m_uiParamID] <= value)
+                    if (fParamBuffer <= value)
                         return true;
                     break;
                 case TransitionComparisonOperator.OVER:
-                    if (pFSM.dicFloatParam[m_uiParamID] > value)
+                    if (fParamBuffer > value)
                         return true;
                     break;
                 case TransitionComparisonOperator.UNDER:
-                    if (pFSM.dicFloatParam[m_uiParamID] < value)
+                    if (fParamBuffer < value)
                         return true;
                     break;
             }
@@ -989,11 +980,11 @@ namespace FiniteStateMachine
                     UDL.LogWarning("bool 변수에 잘못된 조건연산자를 지정했음", FSM.logOption, FSM.warningLoglv);
                     return false;
                 case TransitionComparisonOperator.EQUALS:
-                    if (pFSM.dicBoolParam[m_uiParamID] == value)
+                    if (bParamBuffer == value)
                         return true;
                     break;
                 case TransitionComparisonOperator.NOTEQUAL:
-                    if (pFSM.dicBoolParam[m_uiParamID] != value)
+                    if (bParamBuffer != value)
                         return true;
                     break;
             }
