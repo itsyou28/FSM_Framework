@@ -356,7 +356,8 @@ namespace FiniteStateMachine
 
             curState.End(transParamID, nextStateID);
 
-            history.Push(curState.eID);
+            if(!curState.NoHistory)
+                history.Push(curState.eID);
 
             curState = dicStateList[nextStateID];
 
@@ -429,6 +430,8 @@ namespace FiniteStateMachine
     public class State
     {
         public STATE_ID eID { get; private set; }
+
+        public bool NoHistory = false;
 
         [System.NonSerialized]
         public string name = null;

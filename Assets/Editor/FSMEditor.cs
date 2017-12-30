@@ -147,7 +147,8 @@ public class FSMEditor : EditorWindow
         if (GUILayout.Button(isShow ? "-":"+", GUILayout.Width(50)))
             isShow = !isShow;
         
-        GUILayout.Label(typecode.ToString() + " Param (" + dic.Count + ")");
+        if(dic != null)
+            GUILayout.Label(typecode.ToString() + " Param (" + dic.Count + ")");
         
         EditorGUILayout.EndHorizontal();
 
@@ -283,6 +284,8 @@ public class FSMEditor : EditorWindow
                 BK_Function.ResizeArr<TransitionCondition>(transMax - 1, ref state.arrTransitionList);
         }
 
+        state.NoHistory = GUILayout.Toggle(state.NoHistory, "NoHistory", GUILayout.Width(100));
+
         GUILayout.Label("", GUILayout.ExpandWidth(true));
 
         GUILayout.EndHorizontal();
@@ -298,6 +301,9 @@ public class FSMEditor : EditorWindow
                     state.arrTransitionList[i] = new TransitionCondition(0, 0, 0);
 
                 int TransCondParam_Max = TransitionConditionEdit(state, i);
+
+                if (TransCondParam_Max == -1)
+                    continue;
 
                 TransCondParamEdit(state, i, TransCondParam_Max);
 
@@ -315,6 +321,7 @@ public class FSMEditor : EditorWindow
         if (GUILayout.Button("X", GUILayout.Width(30)) && state.arrTransitionList.Length > 1)
         {
             BK_Function.RemoveAtArr<TransitionCondition>(countInList, ref state.arrTransitionList);
+            return -1;
         }
 
         TRANS_ID transid = state.arrTransitionList[countInList].eTransID;
