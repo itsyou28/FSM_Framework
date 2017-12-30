@@ -11,7 +11,7 @@ namespace FiniteStateMachine
         Main = 0,
         UserStory,
         MainUI,
-        Sub,
+        SubUI,
         PopupUI
     }
 
@@ -23,7 +23,7 @@ namespace FiniteStateMachine
 
     public enum TRANS_PARAM_ID
     {
-        TRIGGER_NONE,
+        TRIGGER_NONE = 1000,
         TRIGGER_RESET,
         TRIGGER_ESCAPE,
         TRIGGER_BACKBTN,
@@ -39,10 +39,16 @@ namespace FiniteStateMachine
         TRIGGER_COMPLETE,
         TRIGGER_CHECK_CONDITION,
         TRIGGER_CHECK_ANY_CONDITION,
+
+        INT_NONE = 2000,
         INT_USERSTORY_STATE,
         INT_SELECT_MENU,
         INT_USERSTORY_PRE_STATE,
         INT_FLAG,
+
+        FLOAT_NONE = 3000,
+
+        BOOL_NONE = 4000,
     }
 
     public enum STATE_ID

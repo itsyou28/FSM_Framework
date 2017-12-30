@@ -5,18 +5,29 @@ namespace FiniteStateMachine
 {
     public class FSM_Layer
     {
+        private static FSM_Layer instance = null;
+        public static FSM_Layer Inst
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new FSM_Layer();
+                return instance;
+            }
+        }
+
         const int iMaxLayer = 5;
 
         Dictionary<FSM_ID, FSM>[] dicFSM_EachLayer = new Dictionary<FSM_ID, FSM>[iMaxLayer];
 
         FSM[] curFSM_EachLayer = new FSM[iMaxLayer];
+        FSM_ID[] layerFSM_Buffer = new FSM_ID[iMaxLayer];
 
         event deleLayerPauseResume EventLayerPause;
         event deleLayerPauseResume EventLayerResume;
 
         Dictionary<FSM_LAYER_ID, List<deleStateTransEvent>> dicLayerChangeState = new Dictionary<FSM_LAYER_ID, List<deleStateTransEvent>>();
 
-        FSM_ID[] layerFSM_Buffer = new FSM_ID[iMaxLayer];
 
         int layerNum;
 
