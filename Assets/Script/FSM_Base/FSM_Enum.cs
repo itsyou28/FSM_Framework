@@ -19,7 +19,51 @@ namespace FiniteStateMachine
     {
         NONE = 0,
         Main,
+        USMain,
+        UIMain,
+        PopupUI,
     }
+
+    //Inspector 화면 State 드롭다운메뉴는 선택한 FSM_ID에 따라 목록이 변경된다. 
+    //STATE_ID 언더바 앞의 prefix가 선택한 FSM_ID와 일치해야 한다. 
+    //[Prefix]_[STATE_ID] // Prefix = FSM_ID
+
+    public enum STATE_ID
+    {
+        None = 0,
+        AnyState,
+        HistoryBack,
+
+        USMain_Loading = 100,
+        USMain_WaitTouch,
+        USMain_Mainmenu,
+        USMain_ProgressSample,
+        USMain_BtnSample,
+        USMain_ScrollSample,
+        USMain_AnimationSample,
+        USMain_UserStoryDepth2,
+        USMain_UserSotryDepth3,
+
+        UIMain_Standby = 1000,
+        UIMain_ProgressSampleIntro,
+        UIMain_ProgressSampleOutro,
+        UImain_BtnSampleIntro,
+        UIMain_BtnSampleOutro,
+        UIMain_ScrollSampleIntro,
+        UIMain_ScrollSampleOutro,
+        UIMain_AnimationSampleIntro,
+        UIMain_AnimationSampleOutro,
+        UIMain_UserStoryDepth2_Intro,
+        UIMain_UserStoryDepth2_Outro,
+        UIMain_UserStoryDepth3_Intro,
+        UIMain_UserStoryDepth3_Outro,
+
+        PopupUI_Sleep = 10000,
+        PopupUI_Exit,
+        PopupUI_Menu,
+
+    }
+
 
     public enum TRANS_PARAM_ID
     {
@@ -49,14 +93,6 @@ namespace FiniteStateMachine
         FLOAT_NONE = 3000,
 
         BOOL_NONE = 4000,
-    }
-
-    public enum STATE_ID
-    {
-        None = 0,
-        AnyState,
-        HistoryBack,
-
     }
 
 
