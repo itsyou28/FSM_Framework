@@ -28,6 +28,11 @@ namespace FiniteStateMachine
 
         Dictionary<FSM_LAYER_ID, List<deleStateTransEvent>> dicLayerChangeState = new Dictionary<FSM_LAYER_ID, List<deleStateTransEvent>>();
 
+        const int nLogOption = 2;
+
+        const int logLv = 8;
+        const int warningLoglv = 7;
+        const int errorLoglv = 6;
 
         int layerNum;
 
@@ -59,7 +64,7 @@ namespace FiniteStateMachine
             layerNum = (int)eLayer;
             if (dicFSM_EachLayer.Length <= layerNum)
             {
-                UDL.LogError("할당되지 않은 레이어를 호출하고 있습니다 Layer 및 iMaxLayer를 확인해주세요", FSM.logOption, FSM.errorLoglv);
+                UDL.LogError("할당되지 않은 레이어를 호출하고 있습니다 Layer 및 iMaxLayer를 확인해주세요", nLogOption, errorLoglv);
                 return;
             }
 
@@ -69,14 +74,14 @@ namespace FiniteStateMachine
             if (id != FSM_ID.NONE)
             {
                 if (dicFSM_EachLayer[layerNum].ContainsKey(id))
-                  UDL.LogWarning("동일 레이어에 중복된 FSM ID 를 등록하려함!", FSM.logOption, FSM.warningLoglv); 
+                  UDL.LogWarning("동일 레이어에 중복된 FSM ID 를 등록하려함!", nLogOption, warningLoglv); 
                 else
                     newFSM.SetFSMID(id);
             }
 
             dicFSM_EachLayer[layerNum].Add(newFSM.fsmID, newFSM);
 
-            UDL.Log(eLayer + " // add : " + newFSM.fsmID, FSM.logOption, FSM.logLv);
+            UDL.Log(eLayer + " // add : " + newFSM.fsmID, nLogOption, logLv);
 
             if (curFSM_EachLayer[layerNum] == null)
             {
@@ -98,7 +103,7 @@ namespace FiniteStateMachine
                 dicFSM_EachLayer[layerNum].Remove(id);
             }
         else
-            UDL.LogWarning("가지고 있지 않은 FSM을 삭제하려 함", FSM.logOption, FSM.warningLoglv); 
+            UDL.LogWarning("가지고 있지 않은 FSM을 삭제하려 함", nLogOption, warningLoglv); 
 
             if (curFSM_EachLayer[layerNum].fsmID == id)
                 curFSM_EachLayer[layerNum] = null;
@@ -175,7 +180,7 @@ namespace FiniteStateMachine
         {
             if (curFSM_EachLayer[(int)eLayer] == null)
             {
-                UDL.LogWarning(eLayer + " 지정한 레이어에 FSM이 지정되 있지 않음", FSM.logOption, FSM.warningLoglv);
+                UDL.LogWarning(eLayer + " 지정한 레이어에 FSM이 지정되 있지 않음", nLogOption, warningLoglv);
                 return false;
             }
             else
@@ -199,13 +204,13 @@ namespace FiniteStateMachine
 
             if (dicFSM_EachLayer[layerNum] == null)
             {
-                UDL.LogError("지정한 레이어에 FSM이 지정되 있지 않음 ", FSM.logOption, FSM.errorLoglv);
+                UDL.LogError("지정한 레이어에 FSM이 지정되 있지 않음 ", nLogOption, errorLoglv);
                 return null;
             }
 
             if (!dicFSM_EachLayer[layerNum].TryGetValue(fsmID, out tFSMBuffer))
             {
-                UDL.LogError(fsmID.ToString() + " FSM 이 등록되어 있지 않음", FSM.logOption, FSM.errorLoglv);
+                UDL.LogError(fsmID.ToString() + " FSM 이 등록되어 있지 않음", nLogOption, errorLoglv);
                 return null;
             }
 
@@ -220,13 +225,13 @@ namespace FiniteStateMachine
 
             if (dicFSM_EachLayer[layerNum] == null)
             {
-                UDL.LogError("지정한 레이어에 FSM이 지정되 있지 않음 ", FSM.logOption, FSM.errorLoglv);
+                UDL.LogError("지정한 레이어에 FSM이 지정되 있지 않음 ", nLogOption, errorLoglv);
                 return null;
             }
 
             if (!dicFSM_EachLayer[layerNum].TryGetValue(fsmID, out tFSMBuffer))
             {
-                UDL.LogError(fsmID.ToString() + " FSM 이 등록되어 있지 않음", FSM.logOption, FSM.errorLoglv);
+                UDL.LogError(fsmID.ToString() + " FSM 이 등록되어 있지 않음", nLogOption, errorLoglv);
                 return null;
             }
 
@@ -263,13 +268,13 @@ namespace FiniteStateMachine
 
             if (!CurLayerCheck(eLayer))
             {
-                UDL.LogWarning("Fail ChangeFSM. Layer : " + eLayer, FSM.logOption, FSM.warningLoglv);
+                UDL.LogWarning("Fail Change Layer : " + eLayer, nLogOption, warningLoglv);
                 return;
             }
 
             if (!dicFSM_EachLayer[layerNum].TryGetValue(fsmID, out tFSMBuffer))
             {
-                UDL.LogWarning(eLayer + " 에 " + fsmID + " 가 등록되어 있지 않습니다", FSM.logOption, FSM.warningLoglv);
+                UDL.LogWarning(eLayer + " 에 " + fsmID + " 가 등록되어 있지 않습니다", nLogOption, warningLoglv);
                 return;
             }
 
@@ -288,7 +293,7 @@ namespace FiniteStateMachine
                 curFSM_EachLayer[layerNum].Resume();
             }
 
-            UDL.Log("(ChangeFSM) curFSM : " + curFSM_EachLayer[layerNum].fsmID.ToString(), FSM.logOption, FSM.logLv); 
+            UDL.Log("(ChangeFSM) curFSM : " + curFSM_EachLayer[layerNum].fsmID.ToString(), nLogOption, logLv); 
         }
 
         public void ChangeFSM_Manual(FSM_LAYER_ID eLayer, FSM_ID fsmID)
@@ -354,7 +359,7 @@ namespace FiniteStateMachine
             layerNum = (int)eLayer;
             if (layerNum >= iMaxLayer)
             {
-                UDL.LogError("할당 되지 않은 레이어를 호출했습니다", FSM.logOption, FSM.errorLoglv);
+                UDL.LogError("할당 되지 않은 레이어를 호출했습니다", nLogOption, errorLoglv);
                 return;
             }
 
@@ -366,7 +371,7 @@ namespace FiniteStateMachine
             int result = RegisterToFSM_ChangeLayerState(eLayer);
 
             if (result == 1)
-                UDL.LogWarning(eLayer + " " + errMsgAbout_Register_ChangeLayerState[result] + " // 이 후 해당 레이어에 ChangeFSM이 호출 될 때 반영될 수 있습니다. ", FSM.logOption, FSM.warningLoglv);
+                UDL.LogWarning(eLayer + " " + errMsgAbout_Register_ChangeLayerState[result] + " // 이 후 해당 레이어에 ChangeFSM이 호출 될 때 반영될 수 있습니다. ", nLogOption, warningLoglv);
 
         }
 

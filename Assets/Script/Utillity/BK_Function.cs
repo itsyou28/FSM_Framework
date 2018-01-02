@@ -253,7 +253,7 @@ public  class BK_Function
 
         if (targetArr.Length == 1)
         {
-            targetArr = null;
+            targetArr = new T[0];
             return;
         }
 

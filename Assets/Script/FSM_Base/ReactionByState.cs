@@ -53,7 +53,7 @@ public interface iStateReaction
 /// </summary>
 public class ReactionByState : MonoBehaviour, iStateReaction
 {
-    protected const int nLogOption = 1;
+    protected const int nLogOption = 3;
     protected const int nLogLevel = 8;
     protected const int nLogWarningLevel = 7;
     protected const int nLogErrorLevel = 6;

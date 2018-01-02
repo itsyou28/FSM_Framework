@@ -34,7 +34,7 @@ public class UIBinder
     bool isCompleteRegist = false;
     event deleFunc callbackCompleteRegist;
 
-    protected const int nLogOption = 2;
+    protected const int nLogOption = 4;
 
     public void ClearAll()
     {

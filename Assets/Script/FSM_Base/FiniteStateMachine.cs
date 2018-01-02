@@ -28,8 +28,8 @@ namespace FiniteStateMachine
     [System.Serializable]
     public class FSM
     {
-        public const int logOption = 0;
-
+        public const int logOption = 1;
+        
         public const int logLv = 8;
         public const int warningLoglv = 7;
         public const int errorLoglv = 6;
@@ -310,13 +310,15 @@ namespace FiniteStateMachine
 
             if (anyState.arrTransitionList == null || anyState.arrTransitionList.Length == 0)
                 UDL.LogError(fsmID + " No Transition List in AnyState", logOption, FSM.errorLoglv);
-
-            for (int idx = 0; idx < anyState.arrTransitionList.Length; idx++)
+            else
             {
-                if (anyState.arrTransitionList[idx].ConditionCheck(this))
+                for (int idx = 0; idx < anyState.arrTransitionList.Length; idx++)
                 {
-                    TransitionStart(anyState.arrTransitionList[idx].eTransID, anyState.arrTransitionList[idx].nextStateID);
-                    break;
+                    if (anyState.arrTransitionList[idx].ConditionCheck(this))
+                    {
+                        TransitionStart(anyState.arrTransitionList[idx].eTransID, anyState.arrTransitionList[idx].nextStateID);
+                        break;
+                    }
                 }
             }
         }

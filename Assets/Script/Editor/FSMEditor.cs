@@ -58,7 +58,7 @@ public class FSMEditor : EditorWindow
     private void Menu()
     {
         EditorGUILayout.BeginHorizontal();
-
+    
         if (GUILayout.Button("Save"))
             SaveFSM();
         
@@ -318,7 +318,7 @@ public class FSMEditor : EditorWindow
     {
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("X", GUILayout.Width(30)) && state.arrTransitionList.Length > 1)
+        if (GUILayout.Button("X", GUILayout.Width(30)) && state.arrTransitionList.Length > 0)
         {
             BK_Function.RemoveAtArr<TransitionCondition>(countInList, ref state.arrTransitionList);
             return -1;

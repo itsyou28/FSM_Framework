@@ -3,7 +3,7 @@ using System.Collections;
 
 public class UIBind<T> : MonoBehaviour
 {
-    protected const int nLogOption = 2;
+    protected const int nLogOption = 4;
 
     public bool isDebug = false;
 
