@@ -18,14 +18,16 @@ public class UIBind<T> : MonoBehaviour
 
         UDL.Log(gameObject.name + " // " + System.Enum.Format(enumType, UI_IDX, "g"), nLogOption);
     }
-    
+
     public Bindable<T> GetData()
     {
         return bindedData;
     }
 
+    /// <summary>
     /// Bind data 를 새로 셋팅한다. 
     /// 주의사항 기존에 해당 UI와 bind 되어 있던 링크가 모두 깨지게 된다. 
+    /// </summary>
     public void SetData(Bindable<T> data)
     {
         UDL.Log("SetData : " + System.Enum.Format(enumType, UI_IDX, "g"), nLogOption); 

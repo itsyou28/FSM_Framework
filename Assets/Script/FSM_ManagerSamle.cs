@@ -8,21 +8,37 @@ public class FSM_ManagerSamle : MonoBehaviour
 
     private void Awake()
     {
-
-        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.UserStory, OnChangeUserStory);
-        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.MainUI, OnChangeMainUI);
-        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.PopupUI, OnChangePopupUI);
-
         RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
         RegistFSM(FSM_LAYER_ID.MainUI, FSM_ID.UIMain);
         //RegistFSM(FSM_LAYER_ID.PopupUI, FSM_ID.PopupUI);
 
     }
-    private void Start()
+
+    Bindable<string> curUSState;
+    
+    IEnumerator Start()
     {
-        FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_RESET);
+        UIBinder.Inst.SetCallbackCompleteRegist(OnCompleteRegist);
+
+        yield return true;
         
+        //AnyState->USLoading
+        FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_RESET);   
     }
+
+    void OnCompleteRegist()
+    {
+        //UI 로딩 및 Bind를 사용하는 객체들의 등록이 끝났다면 바인딩을 시작한다. 
+        curUSState = UIBinder.Inst.GetBindedData(S_UI_IDX.Userstory_State);
+
+        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.UserStory, OnChangeUserStory);
+        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.MainUI, OnChangeMainUI);
+        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.PopupUI, OnChangePopupUI);
+        
+        //USLoading -> USTouchWait
+        FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_NEXT);
+    }
+
     void RegistFSM(FSM_LAYER_ID layer, FSM_ID id)
     {
         FSM tFSM = FileManager.Inst.ResourceLoad("FSMData/" + id.ToString()) as FSM;
@@ -41,6 +57,8 @@ public class FSM_ManagerSamle : MonoBehaviour
     void OnChangeUserStory(TRANS_ID transId, STATE_ID stateId, STATE_ID preStateId)
     {
         UDL.Log("UserStory current State : " + stateId);
+        curUSState.Value = stateId.ToString();
+
         FSM_Layer.Inst.SetInt_NoCondChk(FSM_LAYER_ID.MainUI, TRANS_PARAM_ID.INT_USERSTORY_STATE, (int)stateId);
         FSM_Layer.Inst.SetInt_NoCondChk(FSM_LAYER_ID.MainUI, TRANS_PARAM_ID.INT_USERSTORY_PRE_STATE, (int)preStateId);
         FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.MainUI, TRANS_PARAM_ID.TRIGGER_CHECK_ANY_CONDITION);

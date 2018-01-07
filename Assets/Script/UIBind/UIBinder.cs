@@ -3,17 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+/// <summary>
+/// CallBackRegistComplete 함수를 사용해서 GetBindedData 접근 시점을 지정하세요. 
+/// 등록이 완료 되어있을 경우 즉시 callback을 호출하고 안 되어있을 경우 이 후 완료 시점에 callback을 호출합니다. 
+/// 
+/// UI Prefab 로딩이 완료되는 시점에 CompleteRegist()를 호출해주어야 합니다. 
+/// </summary>
 public class UIBinder
 {
     private static UIBinder instance = null;
 
-    /// <summary>
-    /// CallBackRegistComplete 함수를 사용해서 GetBindedData 접근 시점을 지정하세요. 
-    /// 등록이 완료 되어있을 경우 즉시 callback을 호출하고 안 되어있을 경우 이 후 완료 시점에 callback을 호출합니다. 
-    /// 
-    /// UI Prefab 로딩이 완료되었을 때 Regist 과정이 완료된걸로 간주하고
-    /// UI Prefab 로딩이 끝났을 때 호출 되는 OnEnableUI 이벤트 발생 시점에서 RegistComplete()이 호출됩니다. 
-    /// </summary>
     public static UIBinder Inst
     {
         get
@@ -32,7 +31,7 @@ public class UIBinder
     Dictionary<S_UI_IDX, UIBind<string>> dic_S_UI = new Dictionary<S_UI_IDX, UIBind<string>>();
 
     bool isCompleteRegist = false;
-    event deleFunc callbackCompleteRegist;
+    event Action callbackCompleteRegist;
 
     protected const int nLogOption = 4;
 
@@ -62,7 +61,7 @@ public class UIBinder
         }
     }
 
-    public void SetCallbackCompleteRegist(deleFunc _callback)
+    public void SetCallbackCompleteRegist(Action _callback)
     {
         if (isCompleteRegist)
             _callback();

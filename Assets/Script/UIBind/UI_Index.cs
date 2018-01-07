@@ -10,11 +10,14 @@ using UnityEngine;
 public enum N_UI_IDX
 {
     NONE=0,
+    Top_BindingSample,
 }
 
 public enum F_UI_IDX
 {
     NONE = 0,
+    Top_BindingSample,
+    Top_ProgressBarSample,
 }
 
 public enum L_UI_IDX
@@ -35,4 +38,5 @@ public enum D_UI_IDX
 public enum S_UI_IDX
 {
     NONE = 0,
+    Userstory_State,
 }
