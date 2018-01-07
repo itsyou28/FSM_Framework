@@ -28,7 +28,7 @@ namespace FiniteStateMachine
 
         Dictionary<FSM_LAYER_ID, List<deleStateTransEvent>> dicLayerChangeState = new Dictionary<FSM_LAYER_ID, List<deleStateTransEvent>>();
 
-        const int nLogOption = 2;
+        const int nLogOption = (int)LogOption.FSM_Layer;
 
         const int logLv = 8;
         const int warningLoglv = 7;

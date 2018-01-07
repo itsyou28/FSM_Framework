@@ -28,7 +28,7 @@ namespace FiniteStateMachine
     [System.Serializable]
     public class FSM
     {
-        public const int logOption = 1;
+        public const int logOption = (int)LogOption.FSM;
         
         public const int logLv = 8;
         public const int warningLoglv = 7;

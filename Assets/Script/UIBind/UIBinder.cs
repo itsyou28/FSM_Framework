@@ -33,7 +33,7 @@ public class UIBinder
     bool isCompleteRegist = false;
     event Action callbackCompleteRegist;
 
-    protected const int nLogOption = 4;
+    protected const int nLogOption = (int)LogOption.UI_Binder;
 
     public void ClearAll()
     {

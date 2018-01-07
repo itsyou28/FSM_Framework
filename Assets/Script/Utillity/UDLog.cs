@@ -59,11 +59,11 @@ public class UDLog : MonoBehaviour
         
         editorOption.arrOption = new bool[5];
 
-        editorOption.arrOption[0]   = bDefault;
-        editorOption.arrOption[1]   = bFSM;
-        editorOption.arrOption[2]   = bFSMLayer;
-        editorOption.arrOption[3]  = bUIReaction;
-        editorOption.arrOption[4]  = bUIBind;     
+        editorOption.arrOption[(int)LogOption.DEFAULT]      = bDefault;
+        editorOption.arrOption[(int)LogOption.FSM]          = bFSM;
+        editorOption.arrOption[(int)LogOption.FSM_Layer]    = bFSMLayer;
+        editorOption.arrOption[(int)LogOption.FSM_Reaction] = bUIReaction;
+        editorOption.arrOption[(int)LogOption.UI_Binder]    = bUIBind;     
                 
         SetOption(editorOption);
     }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class UIBind<T> : MonoBehaviour
 {
-    protected const int nLogOption = 4;
+    protected const int nLogOption = (int)LogOption.UI_Binder;
 
     public bool isDebug = false;
 
