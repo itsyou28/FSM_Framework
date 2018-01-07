@@ -78,6 +78,9 @@ public class ReactionByState : MonoBehaviour, iStateReaction
     ///Start 시점에서는 FSM이 실행되기 때문에 반드시 Awake시점에서 Initailize 과정이 완료되어야 한다. 
     private void Awake()
     {
+        if (SceneChecker.IS_NOT_USING_FSM_SCENE)
+            return;
+
         UDL.Log(gameObject.name + " Awake // self : " + gameObject.activeSelf + " hierarchy : " + gameObject.activeInHierarchy, nLogOption, isDebug, nLogLevel);
 
         //상위 노드에 의해 초기화 되지 않았다면 초기화를 시작한다. 
@@ -117,6 +120,9 @@ public class ReactionByState : MonoBehaviour, iStateReaction
 
     private void OnDestroy()
     {
+        if (SceneChecker.IS_NOT_USING_FSM_SCENE)
+            return;
+
         State pState;
 
         for (int idx = 0; idx < arrSwitch.Length; idx++)

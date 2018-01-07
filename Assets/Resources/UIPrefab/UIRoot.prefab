@@ -53,3 +53,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrUIPrefab:
   - {fileID: 1688461417883702, guid: 8303de4521be3324992b0046de8bb99e, type: 2}
+  - {fileID: 1262646241558202, guid: f8e0936c66fa0c748b811fd68fb895b6, type: 2}
