@@ -141,6 +141,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4886499759371956}
+  - component: {fileID: 114535238102745954}
   m_Layer: 0
   m_Name: CameraPos
   m_TagString: Untagged
@@ -629,6 +630,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 1
+--- !u!114 &114535238102745954
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610827780504508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cc5396125296224db0ef0b75ef7b80e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eBelongState: 300
 --- !u!114 &114643605556669862
 MonoBehaviour:
   m_ObjectHideFlags: 1
