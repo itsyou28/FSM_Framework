@@ -10,7 +10,7 @@ public class UILoader : MonoBehaviour
     Slider progressBar;
     [SerializeField]
     Text progressText;
-
+    
     void Start()
     {
         State tstate = FSM_Layer.Inst.GetState(FSM_LAYER_ID.UserStory, FSM_ID.USMain, STATE_ID.USMain_Loading);
@@ -28,22 +28,37 @@ public class UILoader : MonoBehaviour
         StartCoroutine(LoadUI());
     }
 
+    /// <summary>
+    /// UIPrefab 개수와 무관하게 항상 비동기로 UI를 로딩하고 진행율을 표시한다. 
+    /// - Resouces/UIPrefab/LoadAtStart 경로에 UIPrefab을 저장
+    /// - 새로운 Prefab이 추가될 경우 Tools/MakeUIList 실행해서 Prefab 목록 갱신
+    /// </summary>
     IEnumerator LoadUI()
     {
-        ResourceRequest request = Resources.LoadAsync("UIPrefab/UIRoot");
+        GameObject uiRoot = new GameObject("UI Root");
+        List<string> uilist = FileManager.Inst.ResourceLoad("UIPrefab/uilist") as List<string>;
+        float sumProgress = 0;
 
-        while(!request.isDone)
+        for (int i = 0; i < uilist.Count; i++)
         {
-            progressBar.value = request.progress;
-            progressText.text = Mathf.FloorToInt(request.progress * 100).ToString();
+            ResourceRequest request = Resources.LoadAsync("UIPrefab/LoadAtStart/"+uilist[i]);
 
-            yield return true;
+            sumProgress = (float)i / uilist.Count;
+
+            while (!request.isDone)
+            {
+                progressBar.value = sumProgress + (request.progress / uilist.Count);
+                progressText.text = Mathf.FloorToInt(progressBar.value * 100).ToString();
+
+                yield return true;
+            }
+            
+            GameObject obj = Instantiate(request.asset) as GameObject;
+            obj.transform.SetParent(uiRoot.transform);
         }
-
+        
         progressBar.value = 1;
         progressText.text = "100";
-
-        Instantiate(request.asset);
 
         UIBinder.Inst.CompleteRegist();
     }
