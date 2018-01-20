@@ -13,13 +13,9 @@ public class UICameraControl : MonoBehaviour
 
     void OnChangeUserStory(TRANS_ID transID, STATE_ID stateid, STATE_ID preStateID)
     {
-        switch(stateid)
-        {
-            case STATE_ID.USBtn_DynamicLayoutBtn:
-                StartCameraMove(UICameraPos.dicPos[STATE_ID.USBtn_DynamicLayoutBtn]);
-                break;
-                //case STATE_ID.usmain_
-        }
+        Transform t;
+        if (UICameraPos.dicPos.TryGetValue(stateid, out t))
+            StartCameraMove(t);
     }
 
     public void StartCameraMove(Transform _target)

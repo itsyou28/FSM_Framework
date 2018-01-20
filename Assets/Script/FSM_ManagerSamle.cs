@@ -26,6 +26,10 @@ public class FSM_ManagerSamle : MonoBehaviour
         UIBinder.Inst.SetCallbackCompleteRegist(OnCompleteRegist);
 
         fsmBtn.EventResume += OnResumeFSMBtn;
+        State tstate = fsmBtn.GetState(STATE_ID.USBtn_End);
+        tstate.EventStart += OnStart_US_EndState;
+        tstate.EventResume += OnResume_US_EndState;
+
         yield return true;
         
         //AnyState->USLoading
@@ -68,6 +72,18 @@ public class FSM_ManagerSamle : MonoBehaviour
         return tFSM;
     }
 
+    void OnResume_US_EndState(STATE_ID stateId)
+    {
+        //[x]_End -> HistoryBack
+        FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_NEXT);
+    }
+    void OnStart_US_EndState(TRANS_ID transId, STATE_ID stateId, STATE_ID preStateId)
+    {
+        FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
+        //[curState]->USMain_OutroToMainMenu
+        FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_ESCAPE);
+    }
+
     void OnChangeUserStory(TRANS_ID transId, STATE_ID stateId, STATE_ID preStateId)
     {
         UDL.Log("UserStory current State : " + stateId);
@@ -81,13 +97,6 @@ public class FSM_ManagerSamle : MonoBehaviour
         {
             case STATE_ID.USMain_BtnSample:
                 FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USBtn);
-                break;
-            case STATE_ID.USBtn_End:
-            case STATE_ID.USProgress_End:
-            case STATE_ID.USScroll_End:
-                FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
-                //[curState]->USMain_OutroToMainMenu
-                FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_ESCAPE);
                 break;
             default:
                 break;
