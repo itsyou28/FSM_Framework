@@ -48,8 +48,8 @@ public interface iStateReaction
 }
 
 /// <summary>
-/// FSM 생성 및 설정 과정이 끝난 후 작동해서 등록이 보장될 수 있도록
-/// ExcutionOrder를 FSM 생성 코드 이 후로 설정해준다. 
+/// FSM 생성 및 설정 과정 및 UIBinder 등록 절차를 보장할 수 있도록 
+/// ExcutionOrder를 Default 이 후 시점으로 설정한다. 
 /// </summary>
 public class ReactionByState : MonoBehaviour, iStateReaction
 {

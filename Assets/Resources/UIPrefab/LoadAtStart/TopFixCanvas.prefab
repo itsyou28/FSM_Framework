@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 224283164344735524}
   - component: {fileID: 222394920304487376}
   - component: {fileID: 114383888671065140}
+  - component: {fileID: 114735543444339292}
   m_Layer: 5
   m_Name: Userstory State
   m_TagString: Untagged
@@ -459,6 +460,20 @@ MonoBehaviour:
   isDebug: 0
   UI_ID: 1
   text: {fileID: 114812339989978622}
+--- !u!114 &114735543444339292
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1135084335323354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51e5a48c6e33ea34493294e70b0bb45a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDebug: 1
+  UI_ID: 1
+  text: {fileID: 114383888671065140}
 --- !u!114 &114757036965297200
 MonoBehaviour:
   m_ObjectHideFlags: 1

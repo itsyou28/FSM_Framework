@@ -22,6 +22,9 @@ namespace FiniteStateMachine
         USMain,
         UIMain,
         PopupUI,
+        USProgress,
+        USBtn,
+        USScroll,
     }
 
     //Inspector 화면 State 드롭다운메뉴는 선택한 FSM_ID에 따라 목록이 변경된다. 
@@ -43,6 +46,21 @@ namespace FiniteStateMachine
         USMain_AnimationSample,
         USMain_UserStoryDepth2,
         USMain_UserSotryDepth3,
+        USMain_OutroToMainMenu,
+
+
+        USProgress_TimeDiaplay = 200,
+        USProgress_ProgressBar,
+        USProgress_End,
+
+        USBtn_DynamicLayoutBtn = 300,
+        USBtn_Toggle,
+        USBtn_End,
+
+        USScroll_DynamicList = 400,
+        USScroll_HorizonScroll,
+        USScroll_End,
+
 
         UIMain_Standby = 1000,
         UIMain_ProgressSampleIntro,

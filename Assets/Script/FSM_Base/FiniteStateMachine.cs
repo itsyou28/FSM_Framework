@@ -696,7 +696,7 @@ namespace FiniteStateMachine
             fPauseTIme = 0;
             fPauseInterval = 0;
 
-            UDL.LogWarning("TransCondWithTime Start : " + stateid.ToString() + " / " + fStartTime.ToString() + " / " + preStateID + " / " + transID + " / " + this.GetHashCode(), FSM.logOption, FSM.warningLoglv);
+            UDL.LogWarning("TransCondWithTime Owner Start // current :" + stateid.ToString() + " / " + fStartTime.ToString() + " / pre : " + preStateID + " / transID : " + transID + " / hashcode : " + this.GetHashCode(), FSM.logOption, FSM.warningLoglv);
 
         }
 

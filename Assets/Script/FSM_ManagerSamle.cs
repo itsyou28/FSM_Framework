@@ -5,12 +5,17 @@ using FiniteStateMachine;
 
 public class FSM_ManagerSamle : MonoBehaviour
 {
+    FSM fsmBtn;
 
     private void Awake()
     {
-        RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
         RegistFSM(FSM_LAYER_ID.MainUI, FSM_ID.UIMain);
+        fsmBtn  = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USBtn);
+        RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USProgress);
+        RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USScroll);
         //RegistFSM(FSM_LAYER_ID.PopupUI, FSM_ID.PopupUI);
+
+        RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
 
     }
 
@@ -20,10 +25,17 @@ public class FSM_ManagerSamle : MonoBehaviour
     {
         UIBinder.Inst.SetCallbackCompleteRegist(OnCompleteRegist);
 
+        fsmBtn.EventResume += OnResumeFSMBtn;
         yield return true;
         
         //AnyState->USLoading
         FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_RESET);   
+    }
+
+    private void OnResumeFSMBtn(STATE_ID stateID)
+    {
+        if (stateID == STATE_ID.AnyState)
+            fsmBtn.SetTrigger(TRANS_PARAM_ID.TRIGGER_RESET);
     }
 
     void OnCompleteRegist()
@@ -39,19 +51,21 @@ public class FSM_ManagerSamle : MonoBehaviour
         FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_NEXT);
     }
 
-    void RegistFSM(FSM_LAYER_ID layer, FSM_ID id)
+    FSM RegistFSM(FSM_LAYER_ID layer, FSM_ID id)
     {
         FSM tFSM = FileManager.Inst.ResourceLoad("FSMData/" + id.ToString()) as FSM;
 
         if(tFSM == null)
         {
             Debug.LogWarning("No FSM Data " + id.ToString());
-            return;
+            return null;
         }
 
         tFSM.InitNonSerializedField();
 
         FSM_Layer.Inst.AddFSM(layer, tFSM, id);
+
+        return tFSM;
     }
 
     void OnChangeUserStory(TRANS_ID transId, STATE_ID stateId, STATE_ID preStateId)
@@ -65,8 +79,15 @@ public class FSM_ManagerSamle : MonoBehaviour
 
         switch(stateId)
         {
-            case STATE_ID.USMain_Loading:
-                //ui prefab loading;
+            case STATE_ID.USMain_BtnSample:
+                FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USBtn);
+                break;
+            case STATE_ID.USBtn_End:
+            case STATE_ID.USProgress_End:
+            case STATE_ID.USScroll_End:
+                FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
+                //[curState]->USMain_OutroToMainMenu
+                FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_ESCAPE);
                 break;
             default:
                 break;
@@ -98,7 +119,12 @@ public class FSM_ManagerSamle : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_ESCAPE);
+
         TestInputKey();
+
+        FSM_Layer.Inst.Update();
     }
 
     private static void TestInputKey()
