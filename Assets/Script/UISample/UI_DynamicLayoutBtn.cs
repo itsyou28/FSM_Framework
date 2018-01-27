@@ -14,77 +14,75 @@ public class UI_DynamicLayoutBtn : MonoBehaviour
     const int splitMin = 2;
 
     Bindable<int> curIdxBind;
-    int curIdx = -1;
-
-    int x1 = 0;
-    int x2 = 0;
-
+    
     private void Awake()
     {
         UIBinder.Inst.SetCallbackCompleteRegist(() =>
         {
             curIdxBind = UIBinder.Inst.GetBindedData(N_UI_IDX.DynamicLayoutBtnCount);
+            curIdxBind.Value = -1;
         });
     }
 
     public void OnClickAdd()
     {
-        if(curIdx == max)
+        if(curIdxBind.Value == max)
         {
             return;
         }
 
-        curIdx++;
-        curIdxBind.Value = curIdx;
+        curIdxBind.Value++;
 
-        if (curIdx > 1)
+        if (curIdxBind.Value >= splitMin && !rowPanel[1].activeInHierarchy)
             rowPanel[1].SetActive(true);
 
-        if(btnList.Count == curIdx)
+        if(btnList.Count == curIdxBind.Value)
         {
             GameObject obj = Instantiate(Resources.Load("UIPrefab/DynamicBtnOrigin") as GameObject);
-            obj.GetComponentInChildren<Text>().text = "Button " + curIdx.ToString();
-
-            if(x1 < splitMin || x1 == x2)
-            {
-                x1++;
-                obj.transform.SetParent(rowPanel[0].transform, false);
-            }
-            else
-            {
-                x2++;
-                obj.transform.SetParent(rowPanel[1].transform, false);
-            }
-
-            //Debug.Log(x1.ToString() + " // " + x2.ToString());
-            obj.SetActive(true);
+            obj.GetComponentInChildren<Text>().text = "Button " + (curIdxBind.Value+1).ToString();
             btnList.Add(obj);
         }
-        else
-        {
-            btnList[curIdx].SetActive(true);
-        }
-        
+
+        ArrangeRow();
     }
 
     public void OnClickRemove()
     {
-        if(curIdx == -1)
+        if(curIdxBind.Value == -1)
         {
             return;
         }
+        
+        curIdxBind.Value--;
 
-        btnList[curIdx].SetActive(false);
-
-        curIdx--;
-        curIdxBind.Value = curIdx;
-
-        if (curIdx <= 1)
+        if (curIdxBind.Value < splitMin && rowPanel[1].activeInHierarchy)
             rowPanel[1].SetActive(false);
 
-        if (x1 >= splitMin && x1 == x2)
-            x2--;
-        else
-            x1--;
+        ArrangeRow();
+    }
+
+    void ArrangeRow()
+    {
+        int half = Mathf.CeilToInt((curIdxBind.Value+1) * 0.5f);
+
+        Debug.Log(half);
+        for (int i = 0; i < btnList.Count; i++)
+        {
+            if (i > curIdxBind.Value)
+            {
+                btnList[i].SetActive(false);
+                continue;
+            }
+            else
+                btnList[i].SetActive(true);
+
+            if (i < half || i < splitMin)
+                btnList[i].transform.SetParent(rowPanel[0].transform, false);
+            else
+            {
+                btnList[i].transform.SetParent(rowPanel[1].transform, false);
+                btnList[i].transform.SetAsLastSibling();
+            }
+        }
     }
 }
