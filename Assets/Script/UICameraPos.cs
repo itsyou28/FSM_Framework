@@ -5,16 +5,13 @@ using FiniteStateMachine;
 
 public class UICameraPos : MonoBehaviour
 {
-    public static Dictionary<STATE_ID, Transform> dicPos;
+    public static Dictionary<STATE_ID, Transform> dicPos = new Dictionary<STATE_ID, Transform>();
 
     [SerializeField]
     STATE_ID eBelongState;
 
     private void Awake()
     {
-        if (dicPos == null)
-            dicPos = new Dictionary<STATE_ID, Transform>();
-
         if (!dicPos.ContainsKey(eBelongState))
             dicPos.Add(eBelongState, transform);
     }

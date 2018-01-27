@@ -37,8 +37,6 @@ namespace FiniteStateMachine
         {
             dic_ePopupArray.Clear();
 
-            Debug.LogWarning("MakePopupArray");
-
             System.Array arr_FSMID = System.Enum.GetValues(typeof(FSM_ID));
 
             for (int idx = 0; idx < arr_FSMID.Length; idx++)

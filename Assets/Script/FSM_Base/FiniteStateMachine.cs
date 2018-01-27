@@ -309,7 +309,7 @@ namespace FiniteStateMachine
             UDL.Log(fsmID + " AnyStateTransitionChk", logOption, FSM.logLv);
 
             if (anyState.arrTransitionList == null || anyState.arrTransitionList.Length == 0)
-                UDL.LogError(fsmID + " No Transition List in AnyState", logOption, FSM.errorLoglv);
+                UDL.LogWarning(fsmID + " No Transition List in AnyState", logOption, FSM.errorLoglv);
             else
             {
                 for (int idx = 0; idx < anyState.arrTransitionList.Length; idx++)
