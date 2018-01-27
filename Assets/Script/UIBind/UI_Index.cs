@@ -41,4 +41,6 @@ public enum S_UI_IDX
 {
     NONE = 0,
     Userstory_State,
+
+    ToggleMode = 100,
 }
