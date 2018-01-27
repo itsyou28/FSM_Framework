@@ -11,6 +11,8 @@ public enum N_UI_IDX
 {
     NONE=0,
     Top_BindingSample,
+
+    DynamicLayoutBtnCount = 100,
 }
 
 public enum F_UI_IDX
