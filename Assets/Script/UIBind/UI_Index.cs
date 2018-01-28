@@ -13,6 +13,8 @@ public enum N_UI_IDX
     Top_BindingSample,
 
     DynamicLayoutBtnCount = 100,
+
+    DynamicListScrollCount = 200,
 }
 
 public enum F_UI_IDX

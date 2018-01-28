@@ -6,13 +6,14 @@ using FiniteStateMachine;
 public class FSM_ManagerSamle : MonoBehaviour
 {
     FSM fsmBtn;
+    FSM fsmScroll;
 
     private void Awake()
     {
         RegistFSM(FSM_LAYER_ID.MainUI, FSM_ID.UIMain);
         fsmBtn  = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USBtn);
+        fsmScroll = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USScroll);
         RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USProgress);
-        RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USScroll);
         //RegistFSM(FSM_LAYER_ID.PopupUI, FSM_ID.PopupUI);
 
         RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
@@ -20,13 +21,20 @@ public class FSM_ManagerSamle : MonoBehaviour
     }
 
     Bindable<string> curUSState;
-    
+
     IEnumerator Start()
     {
         UIBinder.Inst.SetCallbackCompleteRegist(OnCompleteRegist);
 
-        fsmBtn.EventResume += OnResumeFSMBtn;
+
+        fsmBtn.EventResume += OnResumeUS_FSM;
         State tstate = fsmBtn.GetState(STATE_ID.USBtn_End);
+        tstate.EventStart += OnStart_US_EndState;
+        tstate.EventResume += OnResume_US_EndState;
+
+
+        fsmScroll.EventResume += OnResumeUS_FSM;
+        tstate = fsmScroll.GetState(STATE_ID.USScroll_End);
         tstate.EventStart += OnStart_US_EndState;
         tstate.EventResume += OnResume_US_EndState;
 
@@ -36,12 +44,12 @@ public class FSM_ManagerSamle : MonoBehaviour
         FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_RESET);   
     }
 
-    private void OnResumeFSMBtn(STATE_ID stateID)
+    private void OnResumeUS_FSM(STATE_ID stateID)
     {
         if (stateID == STATE_ID.AnyState)
-            fsmBtn.SetTrigger(TRANS_PARAM_ID.TRIGGER_RESET);
+            FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_RESET);
     }
-
+    
     void OnCompleteRegist()
     {
         //UI 로딩 및 Bind를 사용하는 객체들의 등록이 끝났다면 바인딩을 시작한다. 
@@ -97,6 +105,9 @@ public class FSM_ManagerSamle : MonoBehaviour
         {
             case STATE_ID.USMain_BtnSample:
                 FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USBtn);
+                break;
+            case STATE_ID.USMain_ScrollSample:
+                FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USScroll);
                 break;
             default:
                 break;

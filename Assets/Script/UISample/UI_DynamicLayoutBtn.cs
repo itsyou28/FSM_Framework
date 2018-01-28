@@ -75,8 +75,7 @@ public class UI_DynamicLayoutBtn : MonoBehaviour
     void ArrangeRow()
     {
         int half = Mathf.CeilToInt((curIdx+1) * 0.5f);
-
-        Debug.Log(half);
+        
         for (int i = 0; i < btnList.Count; i++)
         {
             if (i > curIdx)
