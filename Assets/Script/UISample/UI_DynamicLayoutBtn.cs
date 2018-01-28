@@ -7,6 +7,8 @@ public class UI_DynamicLayoutBtn : MonoBehaviour
 {
     [SerializeField]
     GameObject[] rowPanel;
+    [SerializeField]
+    GameObject guideText;
 
     List<GameObject> btnList = new List<GameObject>();
 
@@ -14,32 +16,37 @@ public class UI_DynamicLayoutBtn : MonoBehaviour
     const int splitMin = 2;
 
     Bindable<int> curIdxBind;
+    int curIdx = -1;
     
     private void Awake()
     {
         UIBinder.Inst.SetCallbackCompleteRegist(() =>
         {
             curIdxBind = UIBinder.Inst.GetBindedData(N_UI_IDX.DynamicLayoutBtnCount);
-            curIdxBind.Value = -1;
+            curIdxBind.Value = 0;
         });
     }
 
     public void OnClickAdd()
     {
-        if(curIdxBind.Value == max)
+        if(curIdx == max)
         {
             return;
         }
 
-        curIdxBind.Value++;
+        curIdx++;
+        curIdxBind.Value = curIdx + 1;
 
-        if (curIdxBind.Value >= splitMin && !rowPanel[1].activeInHierarchy)
+        if (curIdx > -1 && guideText.activeInHierarchy)
+            guideText.SetActive(false);
+
+        if (curIdx >= splitMin && !rowPanel[1].activeInHierarchy)
             rowPanel[1].SetActive(true);
 
-        if(btnList.Count == curIdxBind.Value)
+        if(btnList.Count == curIdx)
         {
             GameObject obj = Instantiate(Resources.Load("UIPrefab/DynamicBtnOrigin") as GameObject);
-            obj.GetComponentInChildren<Text>().text = "Button " + (curIdxBind.Value+1).ToString();
+            obj.GetComponentInChildren<Text>().text = "Button " + (curIdx+1).ToString();
             btnList.Add(obj);
         }
 
@@ -48,14 +55,18 @@ public class UI_DynamicLayoutBtn : MonoBehaviour
 
     public void OnClickRemove()
     {
-        if(curIdxBind.Value == -1)
+        if(curIdx == -1)
         {
             return;
         }
         
-        curIdxBind.Value--;
+        curIdx--;
+        curIdxBind.Value = curIdx + 1;
 
-        if (curIdxBind.Value < splitMin && rowPanel[1].activeInHierarchy)
+        if (curIdx == -1 && !guideText.activeInHierarchy)
+            guideText.SetActive(true);
+
+        if (curIdx < splitMin && rowPanel[1].activeInHierarchy)
             rowPanel[1].SetActive(false);
 
         ArrangeRow();
@@ -63,12 +74,12 @@ public class UI_DynamicLayoutBtn : MonoBehaviour
 
     void ArrangeRow()
     {
-        int half = Mathf.CeilToInt((curIdxBind.Value+1) * 0.5f);
+        int half = Mathf.CeilToInt((curIdx+1) * 0.5f);
 
         Debug.Log(half);
         for (int i = 0; i < btnList.Count; i++)
         {
-            if (i > curIdxBind.Value)
+            if (i > curIdx)
             {
                 btnList[i].SetActive(false);
                 continue;
