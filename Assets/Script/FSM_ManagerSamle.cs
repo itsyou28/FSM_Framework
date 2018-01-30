@@ -7,13 +7,14 @@ public class FSM_ManagerSamle : MonoBehaviour
 {
     FSM fsmBtn;
     FSM fsmScroll;
+    FSM fsmProgress;
 
     private void Awake()
     {
         RegistFSM(FSM_LAYER_ID.MainUI, FSM_ID.UIMain);
         fsmBtn  = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USBtn);
         fsmScroll = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USScroll);
-        RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USProgress);
+        fsmProgress = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USProgress);
         //RegistFSM(FSM_LAYER_ID.PopupUI, FSM_ID.PopupUI);
 
         RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
@@ -35,6 +36,11 @@ public class FSM_ManagerSamle : MonoBehaviour
 
         fsmScroll.EventResume += OnResumeUS_FSM;
         tstate = fsmScroll.GetState(STATE_ID.USScroll_End);
+        tstate.EventStart += OnStart_US_EndState;
+        tstate.EventResume += OnResume_US_EndState;
+
+        fsmProgress.EventResume += OnResumeUS_FSM;
+        tstate = fsmProgress.GetState(STATE_ID.USProgress_End);
         tstate.EventStart += OnStart_US_EndState;
         tstate.EventResume += OnResume_US_EndState;
 
@@ -108,6 +114,9 @@ public class FSM_ManagerSamle : MonoBehaviour
                 break;
             case STATE_ID.USMain_ScrollSample:
                 FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USScroll);
+                break;
+            case STATE_ID.USMain_ProgressSample:
+                FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USProgress);
                 break;
             default:
                 break;

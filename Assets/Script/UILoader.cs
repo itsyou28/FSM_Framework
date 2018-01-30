@@ -50,7 +50,7 @@ public class UILoader : MonoBehaviour
                 progressBar.value = sumProgress + (request.progress / uilist.Count);
                 progressText.text = Mathf.FloorToInt(progressBar.value * 100).ToString();
 
-                yield return true;
+                yield return request;
             }
             
             GameObject obj = Instantiate(request.asset) as GameObject;
