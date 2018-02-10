@@ -15,6 +15,14 @@ public enum N_UI_IDX
     DynamicLayoutBtnCount = 100,
 
     DynamicListScrollCount = 200,
+
+    UTC_Now_HourHand = 300,
+    UTC_Now_MinuteHand,
+    UTC_Now_SecondHand,
+
+    UTC_Local_Now_HourHand,
+    UTC_Local_Now_MinuteHand,
+    UTC_Local_Now_SecondHand,
 }
 
 public enum F_UI_IDX
@@ -22,6 +30,8 @@ public enum F_UI_IDX
     NONE = 0,
     Top_BindingSample,
     Top_ProgressBarSample,
+
+    Set_Local_UTC,
 }
 
 public enum L_UI_IDX
@@ -45,4 +55,9 @@ public enum S_UI_IDX
     Userstory_State,
 
     ToggleMode = 100,
+
+    UTC_NowDate=300,
+    UTC_NowTime,
+    UTC_Local_NowDate,
+    UTC_Local_NowTime,
 }

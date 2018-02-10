@@ -30,6 +30,7 @@ public class UIBinder
     Dictionary<D_UI_IDX, UIBind<double>> dic_D_UI = new Dictionary<D_UI_IDX, UIBind<double>>();
     Dictionary<S_UI_IDX, UIBind<string>> dic_S_UI = new Dictionary<S_UI_IDX, UIBind<string>>();
 
+    public bool IsCompleteRegist { get { return isCompleteRegist; } }
     bool isCompleteRegist = false;
     event Action callbackCompleteRegist;
 
