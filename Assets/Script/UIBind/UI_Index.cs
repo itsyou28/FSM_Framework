@@ -23,6 +23,8 @@ public enum N_UI_IDX
     UTC_Local_Now_HourHand,
     UTC_Local_Now_MinuteHand,
     UTC_Local_Now_SecondHand,
+
+    Set_Countdown,
 }
 
 public enum F_UI_IDX

@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 114546580801811126}
   - component: {fileID: 114008790997205760}
   m_Layer: 5
-  m_Name: TriggerNext Btn
+  m_Name: Trigger Left Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231,7 +231,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114002598412335896}
-        m_MethodName: TriggerNext
+        m_MethodName: TriggerLeft
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -22,7 +22,7 @@ namespace FiniteStateMachine
         USMain,
         UIMain,
         PopupUI,
-        USProgress,
+        USTime,
         USBtn,
         USScroll,
     }
@@ -40,7 +40,7 @@ namespace FiniteStateMachine
         USMain_Loading = 100,
         USMain_WaitTouch,
         USMain_Mainmenu,
-        USMain_ProgressSample,
+        USMain_TimeSample,
         USMain_BtnSample,
         USMain_ScrollSample,
         USMain_AnimationSample,
@@ -49,9 +49,12 @@ namespace FiniteStateMachine
         USMain_OutroToMainMenu,
 
 
-        USProgress_TimeDiaplay = 200,
-        USProgress_ProgressBar,
-        USProgress_End,
+        USTime_TimeDiaplay = 200,
+        USTime_ProgressBar,
+        USTime_End,
+        USTime_Countdown,
+        USTime_Stopwatch,
+
 
         USBtn_DynamicLayoutBtn = 300,
         USBtn_Toggle,
@@ -101,6 +104,11 @@ namespace FiniteStateMachine
         TRIGGER_COMPLETE,
         TRIGGER_CHECK_CONDITION,
         TRIGGER_CHECK_ANY_CONDITION,
+        TRIGGER_UP,
+        TRIGGER_DOWN,
+        TRIGGER_LEFT,
+        TRIGGER_RIGHT,
+
 
         INT_NONE = 2000,
         INT_USERSTORY_STATE,

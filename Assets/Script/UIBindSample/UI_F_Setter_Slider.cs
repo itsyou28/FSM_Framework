@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class UI_Float_Setter : UIBindF
+public class UI_F_Setter_Slider : UIBindF
 {
     [SerializeField]
     Slider slider;

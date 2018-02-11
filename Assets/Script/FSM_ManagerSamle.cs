@@ -14,7 +14,7 @@ public class FSM_ManagerSamle : MonoBehaviour
         RegistFSM(FSM_LAYER_ID.MainUI, FSM_ID.UIMain);
         fsmBtn  = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USBtn);
         fsmScroll = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USScroll);
-        fsmProgress = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USProgress);
+        fsmProgress = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USTime);
         //RegistFSM(FSM_LAYER_ID.PopupUI, FSM_ID.PopupUI);
 
         RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
@@ -40,7 +40,7 @@ public class FSM_ManagerSamle : MonoBehaviour
         tstate.EventResume += OnResume_US_EndState;
 
         fsmProgress.EventResume += OnResumeUS_FSM;
-        tstate = fsmProgress.GetState(STATE_ID.USProgress_End);
+        tstate = fsmProgress.GetState(STATE_ID.USTime_End);
         tstate.EventStart += OnStart_US_EndState;
         tstate.EventResume += OnResume_US_EndState;
 
@@ -115,8 +115,8 @@ public class FSM_ManagerSamle : MonoBehaviour
             case STATE_ID.USMain_ScrollSample:
                 FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USScroll);
                 break;
-            case STATE_ID.USMain_ProgressSample:
-                FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USProgress);
+            case STATE_ID.USMain_TimeSample:
+                FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USTime);
                 break;
             default:
                 break;

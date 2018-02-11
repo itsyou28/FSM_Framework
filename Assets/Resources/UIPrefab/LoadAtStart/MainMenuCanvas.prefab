@@ -555,7 +555,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Progress
+  m_Text: 'Time
 
     Sample'
 --- !u!114 &114468782037547424
