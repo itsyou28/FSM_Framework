@@ -14,3 +14,10 @@ public enum LogOption
     FSM_Reaction = 3,
     UI_Binder = 4,
 }
+
+public enum CooltimeState
+{
+    Ready,
+    Cooling,
+    Using,
+}

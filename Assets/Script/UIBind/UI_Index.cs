@@ -33,7 +33,7 @@ public enum F_UI_IDX
     Top_BindingSample,
     Top_ProgressBarSample,
 
-    Set_Local_UTC,
+    Set_Local_UTC,    
 }
 
 public enum L_UI_IDX
