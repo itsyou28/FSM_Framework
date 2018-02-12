@@ -790,7 +790,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Time Display
+  m_Text: Countdown
 --- !u!114 &114601984200241852
 MonoBehaviour:
   m_ObjectHideFlags: 1

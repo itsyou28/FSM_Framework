@@ -50,7 +50,7 @@ namespace FiniteStateMachine
 
 
         USTime_TimeDiaplay = 200,
-        USTime_ProgressBar,
+        USTime_Cooltime,
         USTime_End,
         USTime_Countdown,
         USTime_Stopwatch,

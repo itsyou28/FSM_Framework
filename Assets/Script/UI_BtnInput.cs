@@ -30,4 +30,14 @@ public class UI_BtnInput : MonoBehaviour
     {
         FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_RIGHT);
     }
+
+    public void TriggerUp()
+    {
+        FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_UP);
+    }
+
+    public void TriggerDown()
+    {
+        FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_DOWN);
+    }
 }
