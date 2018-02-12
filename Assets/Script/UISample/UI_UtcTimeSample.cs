@@ -4,7 +4,7 @@ using System.Collections;
 using System;
 
 public class UI_UtcTimeSample : MonoBehaviour
-{    
+{
     public Text curLocalUTC;
 
     Bindable<int> hourHand, minuteHand, secondHand;
@@ -19,36 +19,30 @@ public class UI_UtcTimeSample : MonoBehaviour
 
     void Start()
     {
-        UIBinder.Inst.SetCallbackCompleteRegist(() =>
-        {
-            hourHand = UIBinder.Inst.GetBindedData(N_UI_IDX.UTC_Now_HourHand);
-            minuteHand = UIBinder.Inst.GetBindedData(N_UI_IDX.UTC_Now_MinuteHand);
-            secondHand = UIBinder.Inst.GetBindedData(N_UI_IDX.UTC_Now_SecondHand);
-            utcNowDate = UIBinder.Inst.GetBindedData(S_UI_IDX.UTC_NowDate);
-            utcNowTime = UIBinder.Inst.GetBindedData(S_UI_IDX.UTC_NowTime);
+        hourHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Now_HourHand);
+        minuteHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Now_MinuteHand);
+        secondHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Now_SecondHand);
+        utcNowDate = BindableRepo.Inst.GetBindedData(S_Bind_Idx.UTC_NowDate);
+        utcNowTime = BindableRepo.Inst.GetBindedData(S_Bind_Idx.UTC_NowTime);
 
-            local_hourHand = UIBinder.Inst.GetBindedData(N_UI_IDX.UTC_Local_Now_HourHand);
-            local_minuteHand = UIBinder.Inst.GetBindedData(N_UI_IDX.UTC_Local_Now_MinuteHand);
-            local_secondHand = UIBinder.Inst.GetBindedData(N_UI_IDX.UTC_Local_Now_SecondHand);
-            localNowDate = UIBinder.Inst.GetBindedData(S_UI_IDX.UTC_Local_NowDate);
-            localNowTime = UIBinder.Inst.GetBindedData(S_UI_IDX.UTC_Local_NowTime);
+        local_hourHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Local_Now_HourHand);
+        local_minuteHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Local_Now_MinuteHand);
+        local_secondHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Local_Now_SecondHand);
+        localNowDate = BindableRepo.Inst.GetBindedData(S_Bind_Idx.UTC_Local_NowDate);
+        localNowTime = BindableRepo.Inst.GetBindedData(S_Bind_Idx.UTC_Local_NowTime);
 
-            curSetLocalUtc = UIBinder.Inst.GetBindedData(F_UI_IDX.Set_Local_UTC);
-            curSetLocalUtc.valueChanged += OnChangeGMTControl;
+        curSetLocalUtc = BindableRepo.Inst.GetBindedData(F_Bind_Idx.Set_Local_UTC);
+        curSetLocalUtc.valueChanged += OnChangeGMTControl;
 
-            day.valueChanged += DisplayNowDate;
-            local_day.valueChanged += DisplayLocalNowDate;
-            InvokeRepeating("DisplayNowTime", 0, 1);
+        day.valueChanged += DisplayNowDate;
+        local_day.valueChanged += DisplayLocalNowDate;
+        InvokeRepeating("DisplayNowTime", 0, 1);
 
-            curSetLocalUtc.Value = 9;
-        });
+        curSetLocalUtc.Value = 9;
     }
 
     void OnEnable()
     {
-        if (!UIBinder.Inst.IsCompleteRegist)
-            return;
-
         InvokeRepeating("DisplayNowTime", 0, 1);
     }
 
@@ -119,7 +113,7 @@ public class UI_UtcTimeSample : MonoBehaviour
 
     public void OnChangeGMTControl()
     {
-        curLocalUTC.text = curSetLocalUtc.Value < 0 ? curSetLocalUtc.Value.ToString() : 
+        curLocalUTC.text = curSetLocalUtc.Value < 0 ? curSetLocalUtc.Value.ToString() :
             curSetLocalUtc.Value == 0 ? "0" : "+" + curSetLocalUtc.Value.ToString();
 
         DisplayLocalTime();

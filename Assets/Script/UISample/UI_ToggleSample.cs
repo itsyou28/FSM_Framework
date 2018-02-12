@@ -14,11 +14,8 @@ public class UI_ToggleSample : MonoBehaviour
 
     private void Awake()
     {
-        UIBinder.Inst.SetCallbackCompleteRegist(() =>
-        {
-            curToggle = UIBinder.Inst.GetBindedData(S_UI_IDX.ToggleMode);
-            Initialize();
-        });
+        curToggle = BindableRepo.Inst.GetBindedData(S_Bind_Idx.ToggleMode);
+        Initialize();
     }
 
     void Initialize()

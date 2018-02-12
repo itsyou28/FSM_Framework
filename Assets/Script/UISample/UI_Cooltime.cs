@@ -9,14 +9,7 @@ public class UI_Cooltime : MonoBehaviour
     Bindable<string> row1CoolState;
 
     CooltimeState curState = CooltimeState.Ready;
-
-    private void Awake()
-    {
-        UIBinder.Inst.SetCallbackCompleteRegist(() =>
-        {
-            ChangeCoolState(CooltimeState.Ready);
-        });
-    }
+    
 
     public void OnClick(int idx)
     {

@@ -13,11 +13,8 @@ public class UI_Countdown : MonoBehaviour
 
     private void Awake()
     {
-        UIBinder.Inst.SetCallbackCompleteRegist(() =>
-        {
-            maxCountdown = UIBinder.Inst.GetBindedData(N_UI_IDX.Set_Countdown);
-            maxCountdown.Value = 3;
-        });       
+        maxCountdown = BindableRepo.Inst.GetBindedData(N_Bind_Idx.Set_Countdown);
+        maxCountdown.Value = 3;
     }
 
     public void OnClickStart()

@@ -233,7 +233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 1
+  bindTarget: 1
   text: {fileID: 114475706119220208}
 --- !u!114 &114335685085657932
 MonoBehaviour:
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 2
+  bindTarget: 2
   slider: {fileID: 114410589572130914}
 --- !u!114 &114383888671065140
 MonoBehaviour:
@@ -458,7 +458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 1
+  bindTarget: 1
   text: {fileID: 114812339989978622}
 --- !u!114 &114735543444339292
 MonoBehaviour:
@@ -472,7 +472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 1
-  UI_ID: 1
+  bindTarget: 1
   text: {fileID: 114383888671065140}
 --- !u!114 &114757036965297200
 MonoBehaviour:

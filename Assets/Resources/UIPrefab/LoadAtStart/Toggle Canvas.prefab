@@ -478,7 +478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 100
+  bindTarget: 100
   text: {fileID: 114567052659818628}
 --- !u!114 &114362290981953966
 MonoBehaviour:

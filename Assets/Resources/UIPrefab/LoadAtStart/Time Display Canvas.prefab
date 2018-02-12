@@ -621,7 +621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 302
+  bindTarget: 302
   chType: 0
 --- !u!114 &114048626210886390
 MonoBehaviour:
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 305
+  bindTarget: 305
   chType: 0
 --- !u!114 &114117308944287268
 MonoBehaviour:
@@ -649,7 +649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 301
+  bindTarget: 301
   text: {fileID: 114122974754116614}
 --- !u!114 &114119574348780702
 MonoBehaviour:
@@ -663,7 +663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 300
+  bindTarget: 300
   text: {fileID: 114685325730090862}
 --- !u!114 &114120255702839672
 MonoBehaviour:
@@ -889,7 +889,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 3
+  bindTarget: 3
   slider: {fileID: 114584568376368608}
 --- !u!114 &114327790689617182
 MonoBehaviour:
@@ -930,7 +930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 304
+  bindTarget: 304
   chType: 1
 --- !u!114 &114357090143506266
 MonoBehaviour:
@@ -944,7 +944,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 302
+  bindTarget: 302
   text: {fileID: 114442168172365194}
 --- !u!114 &114399133777150380
 MonoBehaviour:
@@ -1130,7 +1130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 300
+  bindTarget: 300
   chType: 2
 --- !u!114 &114541526591279282
 MonoBehaviour:
@@ -1311,7 +1311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 301
+  bindTarget: 301
   chType: 1
 --- !u!114 &114619100018715482
 MonoBehaviour:
@@ -1697,7 +1697,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 303
+  bindTarget: 303
   chType: 2
 --- !u!114 &114957354537452642
 MonoBehaviour:
@@ -1756,7 +1756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  UI_ID: 303
+  bindTarget: 303
   text: {fileID: 114472699837374028}
 --- !u!222 &222027459284551218
 CanvasRenderer:

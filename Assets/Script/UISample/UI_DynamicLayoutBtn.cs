@@ -20,11 +20,8 @@ public class UI_DynamicLayoutBtn : MonoBehaviour
     
     private void Awake()
     {
-        UIBinder.Inst.SetCallbackCompleteRegist(() =>
-        {
-            curIdxBind = UIBinder.Inst.GetBindedData(N_UI_IDX.DynamicLayoutBtnCount);
-            curIdxBind.Value = 0;
-        });
+        curIdxBind = BindableRepo.Inst.GetBindedData(N_Bind_Idx.DynamicLayoutBtnCount);
+        curIdxBind.Value = 0;
     }
 
     public void OnClickAdd()

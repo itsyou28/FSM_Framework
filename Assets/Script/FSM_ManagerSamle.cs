@@ -9,8 +9,16 @@ public class FSM_ManagerSamle : MonoBehaviour
     FSM fsmScroll;
     FSM fsmProgress;
 
+    Bindable<string> curUSState;
+
     private void Awake()
     {
+        curUSState = BindableRepo.Inst.GetBindedData(S_Bind_Idx.Userstory_State);
+
+        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.UserStory, OnChangeUserStory);
+        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.MainUI, OnChangeMainUI);
+        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.PopupUI, OnChangePopupUI);
+
         RegistFSM(FSM_LAYER_ID.MainUI, FSM_ID.UIMain);
         fsmBtn  = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USBtn);
         fsmScroll = RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USScroll);
@@ -18,15 +26,6 @@ public class FSM_ManagerSamle : MonoBehaviour
         //RegistFSM(FSM_LAYER_ID.PopupUI, FSM_ID.PopupUI);
 
         RegistFSM(FSM_LAYER_ID.UserStory, FSM_ID.USMain);
-
-    }
-
-    Bindable<string> curUSState;
-
-    IEnumerator Start()
-    {
-        UIBinder.Inst.SetCallbackCompleteRegist(OnCompleteRegist);
-
 
         fsmBtn.EventResume += OnResumeUS_FSM;
         State tstate = fsmBtn.GetState(STATE_ID.USBtn_End);
@@ -43,7 +42,10 @@ public class FSM_ManagerSamle : MonoBehaviour
         tstate = fsmProgress.GetState(STATE_ID.USTime_End);
         tstate.EventStart += OnStart_US_EndState;
         tstate.EventResume += OnResume_US_EndState;
+    }
 
+    IEnumerator Start()
+    {
         yield return true;
         
         //AnyState->USLoading
@@ -56,19 +58,6 @@ public class FSM_ManagerSamle : MonoBehaviour
             FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_RESET);
     }
     
-    void OnCompleteRegist()
-    {
-        //UI 로딩 및 Bind를 사용하는 객체들의 등록이 끝났다면 바인딩을 시작한다. 
-        curUSState = UIBinder.Inst.GetBindedData(S_UI_IDX.Userstory_State);
-
-        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.UserStory, OnChangeUserStory);
-        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.MainUI, OnChangeMainUI);
-        FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.PopupUI, OnChangePopupUI);
-        
-        //USLoading -> USTouchWait
-        FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_NEXT);
-    }
-
     FSM RegistFSM(FSM_LAYER_ID layer, FSM_ID id)
     {
         FSM tFSM = FileManager.Inst.ResourceLoad("FSMData/" + id.ToString()) as FSM;

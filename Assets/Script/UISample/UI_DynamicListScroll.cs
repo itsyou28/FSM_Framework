@@ -28,10 +28,7 @@ public class UI_DynamicListScroll : MonoBehaviour
     {
         rowOrigin = Resources.Load("UIPrefab/DynamicListRowOrigin") as GameObject;
 
-        UIBinder.Inst.SetCallbackCompleteRegist(() =>
-        {
-            listCount = UIBinder.Inst.GetBindedData(N_UI_IDX.DynamicListScrollCount);
-        });
+        listCount = BindableRepo.Inst.GetBindedData(N_Bind_Idx.DynamicListScrollCount);
     }
 
     private void OnEnable()

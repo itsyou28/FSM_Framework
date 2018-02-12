@@ -60,6 +60,7 @@ public class UILoader : MonoBehaviour
         progressBar.value = 1;
         progressText.text = "100";
 
-        UIBinder.Inst.CompleteRegist();
+        //USLoading -> USTouchWait
+        FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_NEXT);
     }
 }
