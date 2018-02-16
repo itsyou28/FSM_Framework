@@ -638,11 +638,15 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Build: 0
+    Collab: 0
+    ErrorHub: 0
+    Hub: 0
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
   cloudProjectId: eae71c78-5d69-4850-8578-d78fae4e09fe
-  projectName: FSM_Framework
+  projectName: UI_Framework
   organizationId: itsyou28
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0

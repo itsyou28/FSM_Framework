@@ -19,5 +19,11 @@ public enum CooltimeState
 {
     Ready,
     Cooling,
-    Using,
+    MultiActive,
+}
+
+public enum CooltimeMode
+{
+    OneShot = 1,
+    MultiShot = 2
 }

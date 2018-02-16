@@ -19,6 +19,11 @@ public enum N_Bind_Idx
     UTC_Local_Now_SecondHand,
 
     Set_Countdown,
+
+    Cooltime_Percent = 400,
+    Cooltime_RemainTime,
+    Cooltime_Mode,
+    Cooltime_ShotCost,
 }
 
 public enum F_Bind_Idx
@@ -28,6 +33,12 @@ public enum F_Bind_Idx
     Top_ProgressBarSample,
 
     Set_Local_UTC,
+
+    Cooltime_CurTime = 400,
+    Cooltime_MaxTime,
+    Cooltime_Percent,
+    Cooltime_RemainTime,
+
 }
 
 public enum S_Bind_Idx
@@ -41,8 +52,6 @@ public enum S_Bind_Idx
     UTC_NowTime,
     UTC_Local_NowDate,
     UTC_Local_NowTime,
-}
 
-public enum FF_Bind_Idx
-{
+    CooltimeState = 400,
 }

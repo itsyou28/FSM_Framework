@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class UI_N_Setter_InputField : UIBindN
+public class UI_F_Setter_InputField : UIBindF
 {
     [SerializeField]
     InputField control;
@@ -11,12 +11,12 @@ public class UI_N_Setter_InputField : UIBindN
     {
         base.OnDataChange();
 
-        if (int.Parse(control.text) != bindedData.Value)
+        if (!Mathf.Approximately(float.Parse(control.text), bindedData.Value))
             control.text = bindedData.Value.ToString();
     }
 
     public void OnValueChange(string _value)
     {
-        bindedData.Value = int.Parse(_value);
+        bindedData.Value = float.Parse(_value);
     }
 }

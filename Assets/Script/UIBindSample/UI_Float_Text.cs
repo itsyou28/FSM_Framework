@@ -7,6 +7,10 @@ public class UI_Float_Text : UIBindF
 {
     [SerializeField]
     Text text;
+    [SerializeField]
+    string prefix;
+    [SerializeField]
+    string suffix;
 
     protected override void OnDataChange()
     {

@@ -8,10 +8,15 @@ public class UI_Int_Text : UIBindN
     [SerializeField]
     Text text;
 
+    [SerializeField]
+    string prefix;
+    [SerializeField]
+    string suffix;
+
     protected override void OnDataChange()
     {
         base.OnDataChange();
 
-        text.text = bindedData.Value.ToString();
+        text.text = prefix + bindedData.Value.ToString() + suffix;
     }
 }
