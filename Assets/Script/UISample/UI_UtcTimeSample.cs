@@ -19,19 +19,19 @@ public class UI_UtcTimeSample : MonoBehaviour
 
     void Start()
     {
-        hourHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Now_HourHand);
-        minuteHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Now_MinuteHand);
-        secondHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Now_SecondHand);
-        utcNowDate = BindableRepo.Inst.GetBindedData(S_Bind_Idx.UTC_NowDate);
-        utcNowTime = BindableRepo.Inst.GetBindedData(S_Bind_Idx.UTC_NowTime);
+        hourHand = BindRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Now_HourHand);
+        minuteHand = BindRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Now_MinuteHand);
+        secondHand = BindRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Now_SecondHand);
+        utcNowDate = BindRepo.Inst.GetBindedData(S_Bind_Idx.UTC_NowDate);
+        utcNowTime = BindRepo.Inst.GetBindedData(S_Bind_Idx.UTC_NowTime);
 
-        local_hourHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Local_Now_HourHand);
-        local_minuteHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Local_Now_MinuteHand);
-        local_secondHand = BindableRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Local_Now_SecondHand);
-        localNowDate = BindableRepo.Inst.GetBindedData(S_Bind_Idx.UTC_Local_NowDate);
-        localNowTime = BindableRepo.Inst.GetBindedData(S_Bind_Idx.UTC_Local_NowTime);
+        local_hourHand = BindRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Local_Now_HourHand);
+        local_minuteHand = BindRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Local_Now_MinuteHand);
+        local_secondHand = BindRepo.Inst.GetBindedData(N_Bind_Idx.UTC_Local_Now_SecondHand);
+        localNowDate = BindRepo.Inst.GetBindedData(S_Bind_Idx.UTC_Local_NowDate);
+        localNowTime = BindRepo.Inst.GetBindedData(S_Bind_Idx.UTC_Local_NowTime);
 
-        curSetLocalUtc = BindableRepo.Inst.GetBindedData(F_Bind_Idx.Set_Local_UTC);
+        curSetLocalUtc = BindRepo.Inst.GetBindedData(F_Bind_Idx.Set_Local_UTC);
         curSetLocalUtc.valueChanged += OnChangeGMTControl;
 
         day.valueChanged += DisplayNowDate;

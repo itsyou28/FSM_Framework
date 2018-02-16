@@ -13,7 +13,7 @@ public class UI_Countdown : MonoBehaviour
 
     private void Awake()
     {
-        maxCountdown = BindableRepo.Inst.GetBindedData(N_Bind_Idx.Set_Countdown);
+        maxCountdown = BindRepo.Inst.GetBindedData(N_Bind_Idx.Set_Countdown);
         maxCountdown.Value = 3;
     }
 

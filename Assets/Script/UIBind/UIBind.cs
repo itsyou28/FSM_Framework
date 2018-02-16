@@ -62,54 +62,9 @@ public class UIBind<T> : UIBind
 
     protected override void OnDestroy()
     {
-        bindedData.valueChanged -= OnDataChange;
         UDL.LogWarning(System.Enum.Format(enumType, UI_IDX, "g") + " // OnDestroy!! // bindedData.Value : " + bindedData.Value, nLogOption, isDebug);
-    }
-}
-
-public class UIBind<T1, T2> : UIBind
-{
-    protected Bindable<T1, T2> bindedData;
-
-    protected override void Awake()
-    {
-        if (bindedData == null)
-            UDL.LogError("No binded data " + gameObject.name + " // " + System.Enum.Format(enumType, UI_IDX, "g"));
-
-        bindedData.value1Changed += OnValue1Changed;
-        bindedData.value2Changed += OnValue2Changed;
-
-        UDL.Log(gameObject.name + " // " + System.Enum.Format(enumType, UI_IDX, "g"), nLogOption);
-    }
-
-    private void OnValue1Changed()
-    {
-        UDL.LogWarning(System.Enum.Format(enumType, UI_IDX, "g") + " // bindedData.Value1 : " + bindedData.Value1, nLogOption, isDebug);
-    }
-
-    private void OnValue2Changed()
-    {
-        UDL.LogWarning(System.Enum.Format(enumType, UI_IDX, "g") + " // bindedData.Value2 : " + bindedData.Value2, nLogOption, isDebug);
-    }
-
-    public Bindable<T1, T2> GetData()
-    {
-        return bindedData;
-    }
-
-    public void SetData(Bindable<T1, T2> data)
-    {
-        UDL.Log("SetData : " + System.Enum.Format(enumType, UI_IDX, "g"), nLogOption);
-        bindedData = data;
-        bindedData.value1Changed += OnValue1Changed;
-        bindedData.value2Changed += OnValue2Changed;
-    }
-
-    protected override void OnDestroy()
-    {
-        bindedData.value1Changed -= OnValue1Changed;
-        bindedData.value2Changed -= OnValue2Changed;
-        UDL.LogWarning(System.Enum.Format(enumType, UI_IDX, "g") + " // OnDestroy!! ", nLogOption, isDebug);
+        bindedData.valueChanged -= OnDataChange;
+        bindedData = null;
     }
 }
 
@@ -124,7 +79,7 @@ public class UIBindN : UIBind<int>
         enumType = bindTarget.GetType();
         UI_IDX = (int)bindTarget;
 #endif
-        bindedData = BindableRepo.Inst.GetBindedData(bindTarget);
+        bindedData = BindRepo.Inst.GetBindedData(bindTarget);
 
         base.Awake();
     }
@@ -141,7 +96,7 @@ public class UIBindF : UIBind<float>
         enumType = bindTarget.GetType();
         UI_IDX = (int)bindTarget;
 #endif
-        bindedData = BindableRepo.Inst.GetBindedData(bindTarget);
+        bindedData = BindRepo.Inst.GetBindedData(bindTarget);
 
         base.Awake();
     }
@@ -158,24 +113,7 @@ public class UIBindS : UIBind<string>
         enumType = bindTarget.GetType();
         UI_IDX = (int)bindTarget;
 #endif
-        bindedData = BindableRepo.Inst.GetBindedData(bindTarget);
-
-        base.Awake();
-    }
-}
-
-public class UIBindFF : UIBind<float, float>
-{
-    [SerializeField]
-    FF_Bind_Idx bindTarget;
-
-    protected override void Awake()
-    {
-#if DEBUG_LOG
-        enumType = bindTarget.GetType();
-        UI_IDX = (int)bindTarget;
-#endif
-        bindedData = BindableRepo.Inst.GetBindedData(bindTarget);
+        bindedData = BindRepo.Inst.GetBindedData(bindTarget);
 
         base.Awake();
     }

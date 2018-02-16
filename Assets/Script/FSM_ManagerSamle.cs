@@ -13,7 +13,7 @@ public class FSM_ManagerSamle : MonoBehaviour
 
     private void Awake()
     {
-        curUSState = BindableRepo.Inst.GetBindedData(S_Bind_Idx.Userstory_State);
+        curUSState = BindRepo.Inst.GetBindedData(S_Bind_Idx.Userstory_State);
 
         FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.UserStory, OnChangeUserStory);
         FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.MainUI, OnChangeMainUI);

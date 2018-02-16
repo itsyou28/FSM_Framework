@@ -20,7 +20,7 @@ public class UI_DynamicLayoutBtn : MonoBehaviour
     
     private void Awake()
     {
-        curIdxBind = BindableRepo.Inst.GetBindedData(N_Bind_Idx.DynamicLayoutBtnCount);
+        curIdxBind = BindRepo.Inst.GetBindedData(N_Bind_Idx.DynamicLayoutBtnCount);
         curIdxBind.Value = 0;
     }
 
