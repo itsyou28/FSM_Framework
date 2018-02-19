@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 
+[Serializable]
 public class Bindable<T>
 {
     private T value;
@@ -21,7 +22,22 @@ public class Bindable<T>
         }
     }
 
+    public Bindable()
+    {
+    }
+
+    public Bindable(T _value)
+    {
+        value = _value;
+    }
+
     void OnValueChange()
+    {
+        if (valueChanged != null)
+            valueChanged();
+    }
+
+    public void ValueChange()
     {
         if (valueChanged != null)
             valueChanged();
