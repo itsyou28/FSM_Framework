@@ -47,6 +47,7 @@ namespace FiniteStateMachine
         USMain_UserStoryDepth2,
         USMain_UserSotryDepth3,
         USMain_OutroToMainMenu,
+        USMain_ReflectionEditor,
 
 
         USTime_TimeDiaplay = 200,
