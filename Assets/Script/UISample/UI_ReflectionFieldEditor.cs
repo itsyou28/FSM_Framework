@@ -44,12 +44,10 @@ public partial class UI_ReflectionEditor : MonoBehaviour
         }
     }
 
-    Text curRowLabelText;
     object curData;
 
-    public void SetFieldRow(object data, Text rowDataID)
+    public void SetFieldRow(object data)
     {
-        curRowLabelText = rowDataID;
         curData = data;
         CreateFieldsInfo(data);
     }
@@ -207,7 +205,7 @@ public partial class UI_ReflectionEditor : MonoBehaviour
             input.onEndEdit.AddListener((str) => OnEndEdit(str, _fieldInfo, _data));
 
         if (_fieldInfo.Name == "dataID")
-            input.onEndEdit.AddListener((str) => curRowLabelText.text = str);
+            input.onEndEdit.AddListener((str) => bindCurDataID.Value = str);
 
         if (_value != null)
             input.text = _value.ToString();

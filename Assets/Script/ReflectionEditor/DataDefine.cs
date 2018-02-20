@@ -2,6 +2,8 @@
 using System.Collections;
 using System;
 
+#pragma warning disable 0649
+
 [Serializable]
 class DataBase
 {
@@ -33,3 +35,5 @@ namespace Data
         public string f;        
     }
 }
+
+#pragma warning restore 0649

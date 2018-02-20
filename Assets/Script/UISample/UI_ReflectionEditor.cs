@@ -9,6 +9,9 @@ using System.Linq;
 public partial class UI_ReflectionEditor : MonoBehaviour
 {
     [SerializeField]
+    ToggleGroup toggleGroup;
+
+    [SerializeField]
     Transform controlPanel;
     [SerializeField]
     GameObject classBtnOrigin;
@@ -29,11 +32,27 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     //데이터 선택 버튼을 위한 pool
     ObjectPool<GameObject> rowPool;
 
+    Bindable<string> bindCurType;
+    Bindable<string> bindCurDataID;
+    Bindable<string> bindSaveMessage;
+
+    Text curRowLabelText;
+
     private void Awake()
     {
         rowPool = new ObjectPool<GameObject>(5, 3, CreateRow);
 
+        bindCurType = BindRepo.Inst.GetBindedData(S_Bind_Idx.ReflectionEditor_CurDataType);
+        bindCurDataID = BindRepo.Inst.GetBindedData(S_Bind_Idx.ReflectionEditor_CurDataID);
+        bindCurDataID.valueChanged += OnChangedCurDataID;
+        bindSaveMessage = BindRepo.Inst.GetBindedData(S_Bind_Idx.ReflectionEditor_SaveExportMessage);
+        
         InitFieldEditor();
+    }
+
+    private void OnChangedCurDataID()
+    {
+        curRowLabelText.text = bindCurDataID.Value;
     }
 
     GameObject CreateRow()
@@ -89,6 +108,8 @@ public partial class UI_ReflectionEditor : MonoBehaviour
 
                     LoadData();
                     MakeDataRowBtn();
+
+                    bindCurType.Value = curClass.Name;
                 }
             });
 
@@ -106,11 +127,15 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     void MakeDataRowBtn()
     {
         PushBackAllRow();
-
+        
+        GameObject lastRow = null;
         foreach (DataBase t in dataList)
         {
-            SetRowData(t.dataID, t);
+            lastRow = SetRowData(t.dataID, t);
         }
+
+        toggleGroup.SetAllTogglesOff();
+        lastRow.GetComponent<Toggle>().isOn = true;
     }
 
     private void LoadData()
@@ -146,7 +171,9 @@ public partial class UI_ReflectionEditor : MonoBehaviour
         {
             if (value)
             {
-                SetFieldRow(data, text);
+                curRowLabelText = text;
+                bindCurDataID.Value = dataID;
+                SetFieldRow(data);
             }
         });
 
@@ -155,7 +182,6 @@ public partial class UI_ReflectionEditor : MonoBehaviour
         removeBtn.onClick.RemoveAllListeners();
         removeBtn.onClick.AddListener(() =>
         {
-            toggle.isOn = false;
             go.gameObject.SetActive(false);
             rowPool.Push(go);
             dataList.Remove(data);
@@ -171,7 +197,7 @@ public partial class UI_ReflectionEditor : MonoBehaviour
         object newData = Activator.CreateInstance(curClass);
         DataBase t = newData as DataBase;
 
-        dataList.AddFirst(newData);
+        dataList.AddLast(newData);
 
         SetRowData(t.dataID, newData).transform.SetAsFirstSibling();
     }
@@ -179,7 +205,14 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     public void SaveData()
     {
         if(dataList != null)
+        {
             FileManager.Inst.FileSave("", curClass.Name, dataList);
+            bindSaveMessage.Value = "(" + DateTime.Now.ToString("hh:mm:ss") + ") save " + curClass.Name;
+        }
+    }
+
+    public void ExportData()
+    {
     }
 
     private void OnDestroy()

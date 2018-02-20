@@ -54,4 +54,8 @@ public enum S_Bind_Idx
     UTC_Local_NowTime,
 
     CooltimeState = 400,
+
+    ReflectionEditor_CurDataType = 500,
+    ReflectionEditor_CurDataID,
+    ReflectionEditor_SaveExportMessage,
 }
