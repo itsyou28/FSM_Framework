@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
-public class UI_ReflectionEditor : MonoBehaviour
+public partial class UI_ReflectionEditor : MonoBehaviour
 {
     [SerializeField]
     Transform controlPanel;
@@ -31,8 +31,9 @@ public class UI_ReflectionEditor : MonoBehaviour
 
     private void Awake()
     {
-        rowPool = new ObjectPool<GameObject>(1, 3, CreateRow);
-        Debug.Log("Awake " + rowPool.Count);
+        rowPool = new ObjectPool<GameObject>(5, 3, CreateRow);
+
+        InitFieldEditor();
     }
 
     GameObject CreateRow()
@@ -43,6 +44,19 @@ public class UI_ReflectionEditor : MonoBehaviour
         newRow.SetActive(false);
 
         return newRow;
+    }
+
+    private void PushBackAllRow()
+    {
+        for (int i = 0; i < dataRowPanel.transform.childCount; i++)
+        {
+            GameObject obj = dataRowPanel.transform.GetChild(i).gameObject;
+            if (obj.activeSelf)
+            {
+                obj.SetActive(false);
+                rowPool.Push(obj);
+            }
+        }
     }
 
     void Start()
@@ -70,8 +84,10 @@ public class UI_ReflectionEditor : MonoBehaviour
             {
                 if(value)
                 {
-                    Debug.Log(className);
+                    SaveData();
                     curClass = typeClone;
+
+                    LoadData();
                     MakeDataRowBtn();
                 }
             });
@@ -89,6 +105,16 @@ public class UI_ReflectionEditor : MonoBehaviour
 
     void MakeDataRowBtn()
     {
+        PushBackAllRow();
+
+        foreach (DataBase t in dataList)
+        {
+            SetRowData(t.dataID, t);
+        }
+    }
+
+    private void LoadData()
+    {
         if (FileManager.Inst.CheckFileExists(curClass.Name))
         {
             dataList = FileManager.Inst.FileLoad("", curClass.Name) as LinkedList<object>;
@@ -103,29 +129,6 @@ public class UI_ReflectionEditor : MonoBehaviour
 
             FileManager.Inst.FileSave("", curClass.Name, dataList);
         }
-
-        PushBack();
-
-        foreach(DataBase t in dataList)
-        {
-            SetRowData(t.dataID, t);
-        }
-    }
-
-    private void PushBack()
-    {
-        for (int i = 0; i < dataRowPanel.transform.childCount; i++)
-        {
-            GameObject obj = dataRowPanel.transform.GetChild(i).gameObject;
-            if(obj.activeSelf)
-            {
-                obj.SetActive(false);
-                rowPool.Push(obj);
-                Debug.Log("PushBack " + rowPool.Count);
-            }
-        }
-
-        Debug.Log("PushBack " + rowPool.Count);
     }
     
     GameObject SetRowData(string dataID, object data)
@@ -175,10 +178,12 @@ public class UI_ReflectionEditor : MonoBehaviour
 
     public void SaveData()
     {
+        if(dataList != null)
+            FileManager.Inst.FileSave("", curClass.Name, dataList);
     }
 
-    public void SetFieldRow(object data, Text rowDataID)
+    private void OnDestroy()
     {
-
+        SaveData();
     }
 }
