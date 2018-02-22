@@ -55,27 +55,27 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     /// <summary>
     /// _data가 null이어도 모든 Field를 표시하기 위해 해당 type의 instance를 자동생성시킨다. 
     /// </summary>
-    void CreateFieldsInfo(object _obj)
+    void CreateFieldsInfo(object targetData)
     {
         PushBackAllEditRow();
 
         //필드목록 생성
-        FieldInfo[] arrFields = _obj.GetType().GetFields();
+        FieldInfo[] arrFields = targetData.GetType().GetFields();
 
         for (int idx = 0; idx < arrFields.Length; idx++)
         {
-            object fieldValue = arrFields[idx].GetValue(_obj);
+            object fieldValue = arrFields[idx].GetValue(targetData);
 
             if (!arrFields[idx].FieldType.IsArray)
             {
                 //Primitive type이 아니고 값이 null일 경우 인스턴스 생성
-                if (fieldValue == null && arrFields[idx].FieldType.Name != "String")
+                if (fieldValue == null && arrFields[idx].FieldType != typeof(string))
                 {
                     fieldValue = CreateInstance(arrFields[idx].FieldType);
-                    arrFields[idx].SetValue(_obj, fieldValue);
+                    arrFields[idx].SetValue(targetData, fieldValue);
                 }
 
-                CreateRow(arrFields[idx], fieldValue, _obj);
+                CreateRow(arrFields[idx], fieldValue, targetData);
             }
             else
             {
@@ -84,16 +84,15 @@ public partial class UI_ReflectionEditor : MonoBehaviour
                 {
                     //길이가 1인 배열 인스턴스 생성
                     fieldValue = CreateInstance(arrFields[idx].FieldType, true);
-
-                    arrFields[idx].SetValue(_obj, fieldValue);
+                    arrFields[idx].SetValue(targetData, fieldValue);
                 }
 
-                CreateRow(arrFields[idx], fieldValue, _obj, true);
+                CreateRow(arrFields[idx], fieldValue, targetData, true);
             }
 
             if (arrFields[idx].FieldType.IsArray)//배열일 경우 배열 순회
-                CreateArrayRow(arrFields[idx], _obj);
-            else if (arrFields[idx].FieldType.IsClass && arrFields[idx].FieldType.Name != "String")//클래스 타입일 경우 재귀
+                CreateArrayRow(arrFields[idx], targetData);
+            else if (arrFields[idx].FieldType.IsClass && arrFields[idx].FieldType != typeof(string))//클래스 타입일 경우 재귀
                 CreateFieldsInfo(fieldValue);
         }
     }
@@ -101,54 +100,64 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     /// <summary>
     /// 배열 객체를 순회하며 Row 생성
     /// </summary>
-    void CreateArrayRow(FieldInfo _fieldInfo, object _data)
+    void CreateArrayRow(FieldInfo arrFieldInfo, object targetData)
     {
-        Array arr = (Array)_fieldInfo.GetValue(_data);
+        Array arr = (Array)arrFieldInfo.GetValue(targetData);
 
         for (int i = 0; i < arr.Length; i++)
         {
             object arrElement = arr.GetValue(i);
 
             //배열 객체가 비어있을 경우 객체 생성
-            if (arrElement == null)
+            if (arrElement == null )
             {
-                arrElement = CreateInstance(_fieldInfo.FieldType, true, false);
+                if (arrFieldInfo.FieldType.GetElementType() == typeof(string))
+                    arrElement = "";
+                else
+                    arrElement = CreateInstance(arrFieldInfo.FieldType, true, false);
+
                 arr.SetValue(arrElement, i);
             }
 
-            FieldInfo[] arrFields = arrElement.GetType().GetFields();
+            if(arrElement.GetType().IsPrimitive || arrFieldInfo.FieldType.GetElementType() == typeof(string))
+            {
+                CreateRow(arr, i);
+                continue;
+            }
 
-            for (int idx = 0; idx < arrFields.Length; idx++)
+            FieldInfo[] arrSubFields = arrElement.GetType().GetFields();
+
+            for (int idx = 0; idx < arrSubFields.Length; idx++)
             {
                 //클래스이거나 배열인 경우
-                if (arrFields[idx].FieldType.IsClass && arrFields[idx].FieldType.Name != "String")
+                if (arrSubFields[idx].FieldType.IsClass && arrSubFields[idx].FieldType != typeof(string))
                 {
-                    if (arrFields[idx].FieldType.IsArray)
+                    if (arrSubFields[idx].FieldType.IsArray)
                     {
-                        object subArrElement = arrFields[idx].GetValue(arrElement);
+                        object subElement = arrSubFields[idx].GetValue(arrElement);
 
-                        if (subArrElement == null)
+                        if (subElement == null)
                         {
                             //배열 객체 생성
-                            subArrElement = CreateInstance(arrFields[idx].FieldType, true);
-                            arrFields[idx].SetValue(arrElement, subArrElement);
+                            subElement = CreateInstance(arrSubFields[idx].FieldType, true);
+                            arrSubFields[idx].SetValue(arrElement, subElement);
                         }
-                        CreateRow(arrFields[idx], arrFields[idx].GetValue(arrElement), arrElement, arrFields[idx].FieldType.IsArray);
+                        CreateRow(arrSubFields[idx], arrSubFields[idx].GetValue(arrElement), arrElement, arrSubFields[idx].FieldType.IsArray);
 
                         //해당 배열 객체의 필드 표시를 위한 재귀 호출
-                        CreateArrayRow(arrFields[idx], arrElement);
+                        CreateArrayRow(arrSubFields[idx], arrElement);
                     }
                     else
                     {
-                        object subElement = arrFields[idx].GetValue(arrElement);
+                        object subElement = arrSubFields[idx].GetValue(arrElement);
 
                         if (subElement == null)
                         {
                             //객체 생성
-                            subElement = CreateInstance(arrFields[idx].FieldType);
-                            arrFields[idx].SetValue(arrElement, subElement);
+                            subElement = CreateInstance(arrSubFields[idx].FieldType);
+                            arrSubFields[idx].SetValue(arrElement, subElement);
                         }
-                        CreateRow(arrFields[idx], arrFields[idx].GetValue(arrElement), arrElement, arrFields[idx].FieldType.IsArray);
+                        CreateRow(arrSubFields[idx], arrSubFields[idx].GetValue(arrElement), arrElement, arrSubFields[idx].FieldType.IsArray);
 
                         //해당 객체내의 필드 표시를 위한 재귀 호출
                         CreateFieldsInfo(subElement);
@@ -157,7 +166,7 @@ public partial class UI_ReflectionEditor : MonoBehaviour
                 }
                 //일반 변수인 경우
                 else
-                    CreateRow(arrFields[idx], arrFields[idx].GetValue(arrElement), arrElement, arrFields[idx].FieldType.IsArray);
+                    CreateRow(arrSubFields[idx], arrSubFields[idx].GetValue(arrElement), arrElement, arrSubFields[idx].FieldType.IsArray);
             }
         }
     }
@@ -165,26 +174,28 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     /// <summary>
     /// type에 해당하는 instance 생성
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="_bIsArray">요청 타입이 배열=true</param>
-    /// <param name="_bOutIsArray">생성 타입이 배열=true</param>
-    /// <param name="_nArrLength">배열일 경우 배열 길이 지정</param>
+    /// <param name="targetType"></param>
+    /// <param name="isArray">요청 타입이 배열=true</param>
+    /// <param name="outIsArray">생성 타입이 배열=true</param>
+    /// <param name="targetArrLength">배열일 경우 배열 길이 지정</param>
     /// <returns></returns>
-    object CreateInstance(Type type, bool _bIsArray = false, bool _bOutIsArray = true, int _nArrLength = 1)
+    object CreateInstance(Type targetType, bool isArray = false, bool outIsArray = true, int targetArrLength = 1)
     {
-        if (_bIsArray && _bOutIsArray)
-            return Array.CreateInstance(type, _nArrLength);
+        if (isArray && outIsArray)
+        {
+            return Array.CreateInstance(targetType.GetElementType(), targetArrLength);
+        }
 
-        return Activator.CreateInstance(type);
+        return Activator.CreateInstance(targetType);
     }
 
     /// <summary>
     /// 필드 이름 및 해당 필드 변수를 변경할 수 있는 UI Input Field를 생성
     /// </summary>
-    void CreateRow(FieldInfo _fieldInfo, object _value = null, object _data = null, bool isArray = false)
+    void CreateRow(FieldInfo fieldInfo, object targetValue = null, object targetData = null, bool isArray = false)
     {
-        if (_data != null && _value != null)
-            _fieldInfo.SetValue(_data, _value);
+        if (targetData != null && targetValue != null)
+            fieldInfo.SetValue(targetData, targetValue);
 
         GameObject obj = Instantiate(editRowOrigin);
         obj.transform.SetParent(editRowPanel, false);
@@ -193,29 +204,54 @@ public partial class UI_ReflectionEditor : MonoBehaviour
         InputField input = obj.transform.GetChild(1).GetComponent<InputField>();
 
         if (isArray)
-            labelText.text = "(" + _fieldInfo.FieldType.Name + ")" + _fieldInfo.Name + " (array Size)";
+            labelText.text = "(" + fieldInfo.FieldType.Name + ")" + fieldInfo.Name + " (array Size)";
         else
-            labelText.text = "(" + _fieldInfo.FieldType.Name + ")" + _fieldInfo.Name;
+            labelText.text = "(" + fieldInfo.FieldType.Name + ")" + fieldInfo.Name;
 
         input.onEndEdit.RemoveAllListeners();
 
         if (isArray)
-            input.onEndEdit.AddListener((str) => OnEndEditArr(str, _fieldInfo, _data));
+            input.onEndEdit.AddListener((str) => OnEndEditArr(str, fieldInfo, targetData));
         else
-            input.onEndEdit.AddListener((str) => OnEndEdit(str, _fieldInfo, _data));
+            input.onEndEdit.AddListener((str) => OnEndEdit(str, fieldInfo, targetData));
 
-        if (_fieldInfo.Name == "dataID")
+        if (fieldInfo.Name == "dataID")
             input.onEndEdit.AddListener((str) => bindCurDataID.Value = str);
 
-        if (_value != null)
-            input.text = _value.ToString();
+        if (targetValue != null)
+            input.text = targetValue.ToString();
 
         if (isArray)
         {
-            Array arr = _value as Array;
+            Array arr = targetValue as Array;
 
-            input.text = (arr != null) ? arr.Length.ToString() : "Array Size Here";
+            input.text = arr != null ? arr.Length.ToString() : "Array Size Here";
         }
+
+        obj.SetActive(true);
+    }
+
+    /// <summary>
+    /// 필드 이름 및 해당 필드 변수를 변경할 수 있는 UI Input Field를 생성
+    /// </summary>
+    void CreateRow(Array targetArr, int targetIdx)
+    {
+        GameObject obj = Instantiate(editRowOrigin);
+        obj.transform.SetParent(editRowPanel, false);
+
+        Text labelText = obj.transform.GetChild(0).GetComponent<Text>();
+        InputField input = obj.transform.GetChild(1).GetComponent<InputField>();
+
+        labelText.text = targetIdx.ToString();
+
+        input.onEndEdit.RemoveAllListeners();
+
+        input.onEndEdit.AddListener((str) =>
+        {
+            targetArr.SetValue(StringParseByTypeCode(str, Type.GetTypeCode(targetArr.GetValue(targetIdx).GetType())), targetIdx);
+        });
+
+        input.text = targetArr.GetValue(targetIdx).ToString();
 
         obj.SetActive(true);
     }
@@ -223,49 +259,60 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     /// <summary>
     /// 일반 변수 타입 값이 수정됐을 경우 데이터 적용
     /// </summary>
-    /// <param name="_editString"></param>
-    /// <param name="_fieldInfo"></param>
-    /// <param name="_data"></param>
-    public void OnEndEdit(string _editString, FieldInfo _fieldInfo, object _data)
+    /// <param name="editString"></param>
+    /// <param name="fieldInfo"></param>
+    /// <param name="targetData"></param>
+    public void OnEndEdit(string editString, FieldInfo fieldInfo, object targetData)
     {
         try
         {
-            switch (Type.GetTypeCode(_fieldInfo.FieldType))
-            {
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                    int nData;
-                    int.TryParse(_editString, out nData);
-                    _fieldInfo.SetValue(_data, nData);
-                    break;
-                case TypeCode.UInt16:
-                case TypeCode.UInt32:
-                case TypeCode.UInt64:
-                    long lData;
-                    long.TryParse(_editString, out lData);
-                    break;
-                case TypeCode.String:
-                    _fieldInfo.SetValue(_data, _editString);
-                    break;
-                case TypeCode.Single:
-                    float fData;
-                    float.TryParse(_editString, out fData);
-                    Debug.Log(fData);
-                    _fieldInfo.SetValue(_data, fData);
-                    break;
-                case TypeCode.Double:
-                    double dData;
-                    double.TryParse(_editString, out dData);
-                    Debug.Log(dData);
-                    _fieldInfo.SetValue(_data, dData);
-                    break;
-            }
+            fieldInfo.SetValue(targetData, StringParseByTypeCode(editString, Type.GetTypeCode(fieldInfo.FieldType)));
         }
         catch (Exception e)
         {
-            Debug.LogError(_editString + " // " + (_fieldInfo != null ? _fieldInfo.Name : "") + " // " + (_data != null ? _data.GetType().Name : ""));
+            Debug.LogError(editString + " // " + (fieldInfo != null ? fieldInfo.Name : "") + " // " + (targetData != null ? targetData.GetType().Name : ""));
             Debug.LogException(e);
+        }
+    }
+
+    object StringParseByTypeCode(string str, TypeCode typeCode)
+    {
+        switch (typeCode)
+        {
+            case TypeCode.Int16:
+            case TypeCode.Int32:
+                int n;
+                if (int.TryParse(str, out n))
+                    return n;
+                throw new ArgumentException("Fail Int32 Parse " + str);
+            case TypeCode.Int64:
+                long l;
+                if (long.TryParse(str, out l))
+                    return l;
+                throw new ArgumentException("Fail Int64 Parse " + str);
+            case TypeCode.UInt32:
+                uint un;
+                if (uint.TryParse(str, out un))
+                    return un;
+                throw new ArgumentException("Fail UInt32 Parse " + str);
+            case TypeCode.UInt64:
+                ulong ul;
+                if (ulong.TryParse(str, out ul))
+                    return ul;
+                throw new ArgumentException("Fail UInt64 Parse " + str);
+            case TypeCode.Single:
+                float f;
+                if (float.TryParse(str, out f))
+                    return f;
+                throw new ArgumentException("Fail Single Parse " + str);
+            case TypeCode.Double:
+                double d;
+                if (double.TryParse(str, out d))
+                    return d;
+                throw new ArgumentException("Fail Double Parse " + str);
+            default:
+                throw new ArgumentException("Not support type " + typeCode.ToString());
+
         }
     }
 
@@ -273,13 +320,13 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     /// 배열 Size 변경시 배열 확장
     /// 기존 배열 데이터가 삭제됨!!
     /// </summary>
-    public void OnEndEditArr(string _editString, FieldInfo _fieldInfo, object _data)
+    public void OnEndEditArr(string editString, FieldInfo fieldInfo, object targetData)
     {
         int nLength;
-        int.TryParse(_editString, out nLength);
+        int.TryParse(editString, out nLength);
 
         Debug.Log("OnEndEditArr : " + nLength);
-        _fieldInfo.SetValue(_data, CreateInstance(_fieldInfo.FieldType, true, true, nLength));
+        fieldInfo.SetValue(targetData, CreateInstance(fieldInfo.FieldType, true, true, nLength));
         
         CreateFieldsInfo(curData);
     }

@@ -199,7 +199,11 @@ public partial class UI_ReflectionEditor : MonoBehaviour
 
         dataList.AddLast(newData);
 
-        SetRowData(t.dataID, newData).transform.SetAsFirstSibling();
+        GameObject newRow = SetRowData(t.dataID, newData);
+        newRow.transform.SetAsFirstSibling();
+
+        toggleGroup.SetAllTogglesOff();
+        newRow.GetComponent<Toggle>().isOn = true;
     }
 
     public void SaveData()

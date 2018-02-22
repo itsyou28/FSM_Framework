@@ -34,6 +34,21 @@ namespace Data
         public float e;
         public string f;        
     }
+
+    [Serializable]
+    class C : DataBase
+    {
+        public int[] arrInt;
+        public float[] arrFloat;
+        public string[] arrSTring;
+    }
+
+    [Serializable]
+    class D : DataBase
+    {
+        public long longField;
+        public long[] arrLong;
+    }
 }
 
 #pragma warning restore 0649
