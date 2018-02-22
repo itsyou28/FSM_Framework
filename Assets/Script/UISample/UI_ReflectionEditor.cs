@@ -131,6 +131,7 @@ public partial class UI_ReflectionEditor : MonoBehaviour
         GameObject lastRow = null;
         foreach (DataBase t in dataList)
         {
+            t.UpdateLatestDataStruct();
             lastRow = SetRowData(t.dataID, t);
         }
 
@@ -138,13 +139,43 @@ public partial class UI_ReflectionEditor : MonoBehaviour
         lastRow.GetComponent<Toggle>().isOn = true;
     }
 
+    public void SaveData()
+    {
+        if (dataList != null)
+        {
+            //에디터일 경우 Resource에 저장한다. (빌드시 에디트 파일을 포함시켜야 함)
+            //에디터가 아닐 경우 PersitentDataPath에 저장한다. (빌드 후 리소스 경로에는 쓰기 권한이 없음)
+            if (Application.platform == RuntimePlatform.WindowsEditor)
+                FileManager.Inst.FileSave("Resources/EditData", curClass.Name + ".bytes", dataList);
+            else
+                FileManager.Inst.FileSave("EditData", curClass.Name, dataList);
+
+            bindSaveMessage.Value = "(" + DateTime.Now.ToString("hh:mm:ss") + ") save " + curClass.Name;
+        }
+    }
+
     private void LoadData()
     {
-        if (FileManager.Inst.CheckFileExists(curClass.Name))
+        dataList = null;
+
+        if(Application.platform == RuntimePlatform.WindowsEditor)
         {
-            dataList = FileManager.Inst.FileLoad("", curClass.Name) as LinkedList<object>;
+            //에디터일 경우 Resources 하위에서 파일을 로드한다
+            if (FileManager.Inst.CheckFileExists("Resources/EditData/"+curClass.Name + ".bytes"))
+            {
+                dataList = FileManager.Inst.FileLoad("Resources/EditData", curClass.Name + ".bytes") as LinkedList<object>;
+            }
         }
         else
+        {
+            //에디터가 아닐 경우 PersistentDataPath에서 파일을 체크하고 없을 경우 리소스에서 파일을 읽어온다.
+            dataList = FileManager.Inst.ResourceLoad("EditData/" + curClass.Name) as LinkedList<object>;
+            if (dataList == null)
+                dataList = FileManager.Inst.FileLoad("EditData", curClass.Name + ".bytes") as LinkedList<object>;
+        }
+
+        //데이터 파일이 없거나 로드에 실패했을 경우 데이터를 생성한다. 
+        if (dataList == null)
         {
             dataList = new LinkedList<object>();
 
@@ -152,10 +183,15 @@ public partial class UI_ReflectionEditor : MonoBehaviour
 
             dataList.AddLast(data);
 
-            FileManager.Inst.FileSave("", curClass.Name, dataList);
+            SaveData();
         }
     }
-    
+
+    public void ExportData()
+    {
+    }
+
+
     GameObject SetRowData(string dataID, object data)
     {
         GameObject go = rowPool.Pop();
@@ -204,19 +240,6 @@ public partial class UI_ReflectionEditor : MonoBehaviour
 
         toggleGroup.SetAllTogglesOff();
         newRow.GetComponent<Toggle>().isOn = true;
-    }
-
-    public void SaveData()
-    {
-        if(dataList != null)
-        {
-            FileManager.Inst.FileSave("", curClass.Name, dataList);
-            bindSaveMessage.Value = "(" + DateTime.Now.ToString("hh:mm:ss") + ") save " + curClass.Name;
-        }
-    }
-
-    public void ExportData()
-    {
     }
 
     private void OnDestroy()

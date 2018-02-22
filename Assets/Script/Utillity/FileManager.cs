@@ -8,6 +8,16 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 
+
+/// <summary>
+/// ** FileManager는 모두 persistentDataPath를 기준으로 작동한다. **
+/// - 플랫폼별로 쓰기권한이 제공되는 경로를 기준으로 한다.
+/// - 에디터에서는 Application.DataPath를 기준으로 작동한다. (GetFileStorePath() 참고)
+/// 
+/// - 유니티가 관리하지 않는 파일의 경우 "Resources", "StreamingAssets" 하위의 있는 파일만 빌드에 포함된다. 
+/// - Resources/ 하위의 파일은 빌드 후에는 Resources.Load로만 접근할 수 있고, 쓰기권한이 없다. 
+/// - StreamingAssets/ 하위의 파일은 빌드 후에는 www 등으로 접근할 수 있고, 쓰기권한이 없다.
+/// </summary>
 public class FileManager
 {
     private static FileManager instance = null;
@@ -52,15 +62,13 @@ public class FileManager
             }
             catch (Exception e)
             {
-                Debug.LogError("Resource Load Failed " + fileName);
+                Debug.LogError("Resource Deserialize Failed " + fileName);
                 Debug.LogException(e);
             }
         }
         else
         {
-            Debug.Log("Resource Load Failed " + fileName);
-            Exception e = new Exception(fileName + " Load Failed. textAsset is null");
-            throw e;
+            Debug.LogError("Resource Load Failed " + fileName);
         }
 
         return result;
@@ -70,13 +78,29 @@ public class FileManager
     {
         string path = null;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
         path = Application.dataPath;
 #elif UNITY_ANDROID && !UNITY_EDITOR
         path = Application.persistentDataPath;
 #elif UNITY_IOS && !UNITY_EDITOR
-        path = Application.persistentDataPath;
-		path += "/Documents";
+        path = Application.persistentDataPath + "/Documents";
+#endif
+        if (!string.IsNullOrEmpty(fileName))
+            path = Path.Combine(path, fileName);
+
+        return path;
+    }
+
+    public string GetStreamingAssetPath(string fileName = null)
+    {
+        string path = null;
+
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
+        path = "file:///" + Application.streamingAssetsPath;
+#elif UNITY_ANDROID && !UNITY_EDITOR
+        path =  "jar:file://" + Application.dataPath + "!/assets";
+#elif UNITY_IOS && !UNITY_EDITOR
+        path = "file:///" + Application.streamingAssetsPath";
 #endif
         if (!string.IsNullOrEmpty(fileName))
             path = Path.Combine(path, fileName);
@@ -101,7 +125,7 @@ public class FileManager
     }
 
     /// <summary>
-    /// 기기상에 Resources/ 경로는 체크되지 않는다!!!!
+    /// GetFileStorePath() 하위의 상대경로를 체크한다. 
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
@@ -192,8 +216,7 @@ public class FileManager
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message);
-            throw e;
+            Debug.LogException(e);
         }
         finally
         {
@@ -222,14 +245,11 @@ public class FileManager
             filePath = GetFileStorePath(Path.Combine(filePath, fileName));
         }
 
-        //filePath = Path.Combine(filePath, fileName);
-
         FileStream fs = null;
 
         try
         {
             //파일스트림 생성, 파일이 있으면 오픈, 없으면 생성
-            //에디터 전용 데이터 저장
             fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
             BinaryFormatter bf = new BinaryFormatter();//binaryFormatter 생성
             bf.Serialize(fs, saveObject);//serialize(객체, 파일스트림)
@@ -240,7 +260,7 @@ public class FileManager
         }
         catch (Exception e)
         {
-            throw e;
+            Debug.LogException(e);
         }
         finally
         {
@@ -273,7 +293,7 @@ public class FileManager
         }
         catch (Exception e)
         {
-            throw e;
+            Debug.LogException(e);
         }
     }
 }
