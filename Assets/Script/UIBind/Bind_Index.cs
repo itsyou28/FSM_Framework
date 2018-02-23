@@ -52,6 +52,8 @@ public enum S_Bind_Idx
     UTC_NowTime,
     UTC_Local_NowDate,
     UTC_Local_NowTime,
+    
+    Stopwatch_ElapseTime = 350,
 
     CooltimeState = 400,
 
