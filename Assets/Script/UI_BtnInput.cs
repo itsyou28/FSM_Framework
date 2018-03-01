@@ -45,4 +45,9 @@ public class UI_BtnInput : MonoBehaviour
     {
         FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_BACKBTN);
     }
+
+    public void GetExp(int exp)
+    {
+        UserLv.Inst.AddExp(exp);
+    }
 }

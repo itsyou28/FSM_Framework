@@ -86,7 +86,7 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     void MakeSelectClassBtn()
     {
         var theList = Assembly.GetExecutingAssembly().GetTypes()
-                      .Where(t => t.Namespace == "Data")
+                      .Where(t => t.Namespace == GlovalVar.TableDataNamespace)
                       .ToList();
 
         int idx = 0;
@@ -129,7 +129,7 @@ public partial class UI_ReflectionEditor : MonoBehaviour
         PushBackAllRow();
         
         GameObject lastRow = null;
-        foreach (DataBase t in dataList)
+        foreach (TableDataBase t in dataList)
         {
             t.UpdateLatestDataStruct();
             lastRow = SetRowData(t.dataID, t);
@@ -146,9 +146,9 @@ public partial class UI_ReflectionEditor : MonoBehaviour
             //에디터일 경우 Resource에 저장한다. (빌드시 에디트 파일을 포함시켜야 함)
             //에디터가 아닐 경우 PersitentDataPath에 저장한다. (빌드 후 리소스 경로에는 쓰기 권한이 없음)
             if (Application.platform == RuntimePlatform.WindowsEditor)
-                FileManager.Inst.FileSave("Resources/EditData", curClass.Name + ".bytes", dataList);
+                FileManager.Inst.FileSave("Resources/"+GlovalVar.TableEditDataPath, curClass.Name + ".bytes", dataList);
             else
-                FileManager.Inst.FileSave("EditData", curClass.Name, dataList);
+                FileManager.Inst.FileSave(GlovalVar.TableEditDataPath, curClass.Name, dataList);
 
             bindSaveMessage.Value = "(" + DateTime.Now.ToString("hh:mm:ss") + ") save " + curClass.Name;
         }
@@ -161,17 +161,17 @@ public partial class UI_ReflectionEditor : MonoBehaviour
         if(Application.platform == RuntimePlatform.WindowsEditor)
         {
             //에디터일 경우 Resources 하위에서 파일을 로드한다
-            if (FileManager.Inst.CheckFileExists("Resources/EditData/"+curClass.Name + ".bytes"))
+            if (FileManager.Inst.CheckFileExists("Resources/"+ GlovalVar.TableEditDataPath + "/" + curClass.Name + ".bytes"))
             {
-                dataList = FileManager.Inst.FileLoad("Resources/EditData", curClass.Name + ".bytes") as LinkedList<object>;
+                dataList = FileManager.Inst.FileLoad("Resources/"+ GlovalVar.TableEditDataPath, curClass.Name + ".bytes") as LinkedList<object>;
             }
         }
         else
         {
             //에디터가 아닐 경우 PersistentDataPath에서 파일을 체크하고 없을 경우 리소스에서 파일을 읽어온다.
-            dataList = FileManager.Inst.ResourceLoad("EditData/" + curClass.Name) as LinkedList<object>;
+            dataList = FileManager.Inst.ResourceLoad(GlovalVar.TableEditDataPath +"/" + curClass.Name) as LinkedList<object>;
             if (dataList == null)
-                dataList = FileManager.Inst.FileLoad("EditData", curClass.Name + ".bytes") as LinkedList<object>;
+                dataList = FileManager.Inst.FileLoad(GlovalVar.TableEditDataPath, curClass.Name + ".bytes") as LinkedList<object>;
         }
 
         //데이터 파일이 없거나 로드에 실패했을 경우 데이터를 생성한다. 
@@ -189,6 +189,28 @@ public partial class UI_ReflectionEditor : MonoBehaviour
 
     public void ExportData()
     {
+        Dictionary<int, object> saveDic = new Dictionary<int, object>();
+
+        LinkedListNode<object> node = dataList.First;
+
+        TableDataBase data;
+        
+        while(true)
+        {
+            data = node.Value as TableDataBase;
+
+            saveDic.Add(data.key, data);
+
+            node = node.Next;
+
+            if (node == null)
+                break;
+        }
+
+        if (Application.platform == RuntimePlatform.WindowsEditor)
+            FileManager.Inst.FileSave("Resources/" + GlovalVar.TableDataPath, curClass.Name + ".bytes", saveDic);
+        else
+            FileManager.Inst.FileSave(GlovalVar.TableDataPath, curClass.Name, saveDic);
     }
 
 
@@ -231,7 +253,7 @@ public partial class UI_ReflectionEditor : MonoBehaviour
     public void AddData()
     {
         object newData = Activator.CreateInstance(curClass);
-        DataBase t = newData as DataBase;
+        TableDataBase t = newData as TableDataBase;
 
         dataList.AddLast(newData);
 

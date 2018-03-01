@@ -4,7 +4,10 @@ using System.Collections;
 public enum N_Bind_Idx
 {
     NONE = 0,
-    Top_BindingSample,
+    UserGold,
+    UserLevel,
+    UserExp,
+    UserMaxExp,
 
     DynamicLayoutBtnCount = 100,
 
@@ -29,10 +32,9 @@ public enum N_Bind_Idx
 public enum F_Bind_Idx
 {
     NONE = 0,
-    Top_BindingSample,
-    Top_ProgressBarSample,
+    User_ExpProgress,
 
-    Set_Local_UTC,
+    Set_Local_UTC = 300,
 
     Cooltime_CurTime = 400,
     Cooltime_MaxTime,
@@ -45,6 +47,7 @@ public enum S_Bind_Idx
 {
     NONE = 0,
     Userstory_State,
+    UserExp,
 
     ToggleMode = 100,
 
