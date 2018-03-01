@@ -889,7 +889,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
-  bindTarget: 3
+  bindTarget: 300
   slider: {fileID: 114584568376368608}
 --- !u!114 &114327790689617182
 MonoBehaviour:
