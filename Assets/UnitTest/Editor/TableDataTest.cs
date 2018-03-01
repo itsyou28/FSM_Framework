@@ -14,11 +14,11 @@ public class TableDataTest : MonoBehaviour
         Assert.Greater(lvTable.arrNextLvExp.Length, 0);
     }
 
-    [Test]    
-    [Repeat(10)]
+    [Test]
+    [Repeat(100)]
     public void AddExp()
     {
-        UserLv.Inst.AddExp();
+        UserDataManager.Inst.AddExp();
         //Assert.LessOrEqual(BindRepo.Inst.GetBindedData(F_Bind_Idx.User_ExpProgress).Value, 1);
     }
 }

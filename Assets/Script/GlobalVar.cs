@@ -32,23 +32,8 @@ public enum CooltimeMode
 }
 
 
-public class SingleTon<T> where T : class, new()
+public interface iUserData
 {
-    protected static object _instanceLock = new object();
-    protected static volatile T _instance;
-    public static T Inst
-    {
-        get
-        {
-            lock (_instanceLock)
-            {
-                if (null == _instance)
-                {
-                    _instance = new T();
-                }
-            }
-
-            return _instance;
-        }
-    }
+    bool Load();
+    bool Save();
 }

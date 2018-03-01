@@ -13,6 +13,8 @@ public class FSM_ManagerSamle : MonoBehaviour
 
     private void Awake()
     {
+        UserDataManager.Inst.Initialize();
+
         curUSState = BindRepo.Inst.GetBindedData(S_Bind_Idx.Userstory_State);
 
         FSM_Layer.Inst.RegisterEventChangeLayerState(FSM_LAYER_ID.UserStory, OnChangeUserStory);
@@ -158,5 +160,10 @@ public class FSM_ManagerSamle : MonoBehaviour
             FSM_Layer.Inst.SetInt_NoCondChk(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.INT_SELECT_MENU, 3);
         if (Input.GetKeyDown(KeyCode.Alpha4))
             FSM_Layer.Inst.SetInt_NoCondChk(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.INT_SELECT_MENU, 4);
+    }
+
+    private void OnDestroy()
+    {
+        UserDataManager.Inst.Save();
     }
 }

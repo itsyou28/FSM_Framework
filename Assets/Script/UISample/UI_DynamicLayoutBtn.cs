@@ -43,7 +43,15 @@ public class UI_DynamicLayoutBtn : MonoBehaviour
         if(btnList.Count == curIdx)
         {
             GameObject obj = Instantiate(Resources.Load("UIPrefab/DynamicBtnOrigin") as GameObject);
-            obj.GetComponentInChildren<Text>().text = "Button " + (curIdx+1).ToString();
+            int gold = Random.Range(-100, 100);
+            obj.GetComponentInChildren<Text>().text = gold < 0 ? "Use Gold " + gold : "Earn Gold " + gold;
+            obj.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                if (gold < 0)
+                    UserDataManager.Inst.UseGold(-gold);
+                else
+                    UserDataManager.Inst.EarnGold(gold);
+            });
             btnList.Add(obj);
         }
 

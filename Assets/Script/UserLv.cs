@@ -2,21 +2,44 @@
 using System.Collections;
 using TableData;
 
-public class UserLv : SingleTon<UserLv>
+public class UserLv : iUserData
 {
+    struct StructForFile
+    {
+        public int userLv;
+        public int userExp;
+    }
+
     Bindable<int> userLV, userEXP;
 
     Bindable<float> userEXP_Progress;
     Bindable<string> userExpText;
 
-    int curLvExpStart, curLvExpEnd;
+    int curLvExpStart=0, curLvExpEnd=1;
 
     LvTable lvTable;
 
     public UserLv()
     {
         SetBind();
+        Load();
         UpdateLvTable();
+    }
+
+    public bool Load()
+    {
+        userLV.Value = PlayerPrefs.GetInt("userLV");
+        userEXP.Value = PlayerPrefs.GetInt("userEXP");
+
+        return true;
+    }
+
+    public bool Save()
+    {
+        PlayerPrefs.SetInt("userLV", userLV.Value);
+        PlayerPrefs.SetInt("userEXP", userEXP.Value);
+
+        return true;
     }
 
     void SetBind()
@@ -49,6 +72,8 @@ public class UserLv : SingleTon<UserLv>
         }
         else
             curLvExpEnd = 0;
+
+        OnChangeUserExp();
     }
 
     private void OnChangeUserExp()
@@ -57,12 +82,12 @@ public class UserLv : SingleTon<UserLv>
         userEXP_Progress.Value = BK_Function.ConvertRangePercent(curLvExpStart, curLvExpEnd, userEXP.Value);
     }
 
-    public void AddExp(int earn = 1)
+    public void AddExp(int exp)
     {
         if (curLvExpEnd == 0)
             return;
 
-        userEXP.Value += earn;
+        userEXP.Value += exp;
 
         if (userEXP.Value >= curLvExpEnd)
             LevelUP();
@@ -71,7 +96,7 @@ public class UserLv : SingleTon<UserLv>
     void LevelUP()
     {
         userLV.Value += 1;
+        Debug.LogWarning("LevelUP!! " + userLV.Value);
         UpdateLvTable();
-        OnChangeUserExp();
     }
 }
