@@ -109,9 +109,14 @@ public class FSM_ManagerSamle : MonoBehaviour
             case STATE_ID.USMain_TimeSample:
                 FSM_Layer.Inst.ChangeFSM(FSM_LAYER_ID.UserStory, FSM_ID.USTime);
                 break;
+            case STATE_ID.USMain_ExitConfirm:
+                ExitConfirm();
+                break;
             default:
                 break;
         }
+
+        UserDataManager.Inst.AddExp();
     }
 
 
@@ -147,7 +152,7 @@ public class FSM_ManagerSamle : MonoBehaviour
         FSM_Layer.Inst.Update();
     }
 
-    private static void TestInputKey()
+    void TestInputKey()
     {
         if (Input.GetKeyDown(KeyCode.N))
             FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_NEXT);
@@ -160,6 +165,28 @@ public class FSM_ManagerSamle : MonoBehaviour
             FSM_Layer.Inst.SetInt_NoCondChk(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.INT_SELECT_MENU, 3);
         if (Input.GetKeyDown(KeyCode.Alpha4))
             FSM_Layer.Inst.SetInt_NoCondChk(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.INT_SELECT_MENU, 4);
+    }
+    
+    void ExitConfirm()
+    {
+        System.Action<bool> callback = (result) =>
+        {
+            if (result)
+                ApplicationQuit();
+            else
+                FSM_Layer.Inst.SetTrigger(FSM_LAYER_ID.UserStory, TRANS_PARAM_ID.TRIGGER_ESCAPE);
+        };
+
+        EMC_MAIN.Inst.NoticeEventOccurrence(EMC_CODE.POPUP, "Exit", "종료하시겠습니까?", 1, callback);
+    }
+
+    private void ApplicationQuit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     private void OnDestroy()

@@ -104,10 +104,10 @@ public class PopupWindow : MonoBehaviour
 
     private void OnDisable()
     {
+        FSM_Layer.Inst.Resume(FSM_LAYER_ID.UserStory);
+
         if (callback != null)
             callback(popupResult);
-
-        FSM_Layer.Inst.Resume(FSM_LAYER_ID.UserStory);
     }
 
     private void Update()

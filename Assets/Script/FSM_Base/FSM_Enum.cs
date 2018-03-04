@@ -48,6 +48,7 @@ namespace FiniteStateMachine
         USMain_UserSotryDepth3,
         USMain_OutroToMainMenu,
         USMain_ReflectionEditor,
+        USMain_ExitConfirm,
 
 
         USTime_TimeDiaplay = 200,
