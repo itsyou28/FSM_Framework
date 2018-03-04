@@ -211,6 +211,8 @@ public partial class UI_ReflectionEditor : MonoBehaviour
             FileManager.Inst.FileSave("Resources/" + GlovalVar.TableDataPath, curClass.Name + ".bytes", saveDic);
         else
             FileManager.Inst.FileSave(GlovalVar.TableDataPath, curClass.Name, saveDic);
+
+        bindSaveMessage.Value = "(" + DateTime.Now.ToString("hh:mm:ss") + ") export " + curClass.Name;
     }
 
 
