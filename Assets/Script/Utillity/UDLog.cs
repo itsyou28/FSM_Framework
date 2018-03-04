@@ -19,7 +19,7 @@ public class UDLog : MonoBehaviour
     public static UDLog Inst { get { return instance; } }
 
 
-    public string logdbURL = "";
+    public string logdbURL = "http://localhost";
 
     public bool twoCondition = false;
     public bool logToConsole = false;
