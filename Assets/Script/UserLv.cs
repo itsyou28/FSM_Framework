@@ -96,7 +96,7 @@ public class UserLv : iUserData
     void LevelUP()
     {
         userLV.Value += 1;
-        Debug.LogWarning("LevelUP!! " + userLV.Value);
+        EMC_MAIN.Inst.NoticeEventOccurrence(EMC_CODE.DISP_MSG, "Level UP!!");
         UpdateLvTable();
     }
 }
