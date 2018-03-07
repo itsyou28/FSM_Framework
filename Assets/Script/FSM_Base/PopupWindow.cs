@@ -31,6 +31,7 @@ public class PopupWindow : MonoBehaviour
             UDL.LogError("No Title Msg. No content Msg");
             return;
         }
+
         if (args[0].GetType() != typeof(string))
         {
             UDL.LogError("0 argument must string");

@@ -68,16 +68,12 @@ public class UI_HorizonScroll : MonoBehaviour, IBeginDragHandler, IEndDragHandle
             wasDrag = false;
             _scroll.velocity = Vector2.zero;
 
-            //정규화된 포지션값과 아이템 너비값을 이용해 현재 스크롤 위치랑 가장 가까운 아이템 인덱스를 구한다. 
-            curIDX = Mathf.RoundToInt(_scroll.horizontalNormalizedPosition / normalizedItemWidth);
+            curIDX = GetNearIdx(_scroll.horizontalNormalizedPosition);
 
-            if (curIDX > _scroll.content.childCount)
-            {
-                UDL.LogError("인덱스 초과. \n 초기화가 정상적으로 이뤄졌는지 확인해주세요. \n 아이템의 너비가 모두 동일한지 확인해주세요. ");
+            //첫 번째나 마지막 아이템은 스크롤 영역이 부족한 경우가 있기 때문에 스냅을 하지 않는다. 
+            if (curIDX == 0 || curIDX == arrSnapPos.Length - 1)
                 return;
-            }
-
-            if (_scroll.horizontalNormalizedPosition > arrSnapPos[curIDX])
+            else if (_scroll.horizontalNormalizedPosition > arrSnapPos[curIDX])
                 dampVelocity = -dampStartSpeed;
             else
                 dampVelocity = dampStartSpeed;
@@ -99,7 +95,10 @@ public class UI_HorizonScroll : MonoBehaviour, IBeginDragHandler, IEndDragHandle
 
         //오차범위 이내로 가까워지면 Snap 액션을 중지한다. 
         if (Mathf.Abs(_scroll.horizontalNormalizedPosition - arrSnapPos[curIDX]) < 0.001f)
+        {
+            Debug.Log(curIDX + " / " + arrSnapPos[curIDX]);
             isSnap = false;
+        }
     }
 
     public void OnBeginDrag(PointerEventData _data)
@@ -110,5 +109,33 @@ public class UI_HorizonScroll : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     public void OnEndDrag(PointerEventData _data)
     {
         wasDrag = true;
+    }
+
+    /// <summary>
+    /// 현재 스크롤 포지션과 가장 가까운 스냅포지션 인덱스를 반환한다. 
+    /// </summary>
+    int GetNearIdx(float curPos)
+    {
+        if (curPos >= 1)
+            return arrSnapPos.Length - 1;
+        else if (curPos <= 0)
+            return 0;
+
+        float distance = 0;
+        float preDistance = 2;
+        int result = 0;
+
+        for (int i = 0; i < arrSnapPos.Length; i++)
+        {
+            distance = Mathf.Abs(arrSnapPos[i] - curPos);
+
+            if (distance > preDistance)
+                return result;
+
+            preDistance = distance;
+            result = i;
+        }
+
+        return result;
     }
 }

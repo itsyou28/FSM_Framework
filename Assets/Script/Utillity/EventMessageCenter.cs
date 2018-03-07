@@ -104,7 +104,8 @@ public class EMC<T>
 
 public enum EMC_CODE
 {
-    POPUP=100, //string msg, BTN Type, 
+    POPUP=100, //string msg, BTN Type,
+    DISP_MSG,
 }
 
 public class EMC_MAIN : EMC<EMC_CODE>
